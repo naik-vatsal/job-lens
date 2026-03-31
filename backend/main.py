@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 import subprocess
@@ -34,6 +35,8 @@ logger = logging.getLogger(__name__)
 REDIS_URL = os.environ["REDIS_URL"]
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["20/minute"])
+
+_seeding_complete = False
 
 
 # ── Startup helpers ───────────────────────────────────────────────────────────
@@ -90,18 +93,25 @@ def _run_dbt() -> None:
         logger.warning(f"dbt run skipped: {exc}")
 
 
+async def _startup_background() -> None:
+    global _seeding_complete
+    try:
+        async with async_session_maker() as session:
+            count = await session.scalar(select(func.count(Job.id)))
+            if count == 0:
+                await _seed_jobs(session)
+            else:
+                logger.info(f"Jobs table already has {count} rows — skipping seed")
+        _run_dbt()
+    finally:
+        _seeding_complete = True
+        logger.info("Startup background task complete")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     _run_alembic()
-
-    async with async_session_maker() as session:
-        count = await session.scalar(select(func.count(Job.id)))
-        if count == 0:
-            await _seed_jobs(session)
-        else:
-            logger.info(f"Jobs table already has {count} rows — skipping seed")
-
-    _run_dbt()
+    asyncio.create_task(_startup_background())
     yield
 
 
@@ -424,4 +434,5 @@ async def health(db: AsyncSession = Depends(get_db)):
         "redis": redis_status,
         "celery": celery_status,
         "model_loaded": model_loaded,
+        "seeding_complete": _seeding_complete,
     }
