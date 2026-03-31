@@ -33,6 +33,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 REDIS_URL = os.environ["REDIS_URL"]
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["20/minute"])
 
@@ -124,7 +125,11 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        FRONTEND_URL,
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
