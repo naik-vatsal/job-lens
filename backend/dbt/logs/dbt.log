@@ -1,0 +1,1371 @@
+[0m23:14:30.186229 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a2bcaf50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a2bcad10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a2cc7210>]}
+
+
+============================== 23:14:30.201497 | 5f14213a-5d9a-47eb-a2a0-59509c1cfdd4 ==============================
+[0m23:14:30.201497 [info ] [MainThread]: Running with dbt=1.11.7
+[0m23:14:30.204389 [debug] [MainThread]: running dbt with arguments {'quiet': 'False', 'profiles_dir': '/app/dbt', 'version_check': 'True', 'log_path': '/app/dbt/logs', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'log_format': 'default', 'partial_parse': 'True', 'fail_fast': 'False', 'use_experimental_parser': 'False', 'invocation_command': 'dbt run --project-dir /app/dbt --profiles-dir /app/dbt', 'cache_selected_only': 'False', 'introspect': 'True', 'no_print': 'None', 'write_json': 'True', 'indirect_selection': 'eager', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_cache_events': 'False', 'debug': 'False', 'warn_error': 'None', 'printer_width': '80', 'static_parser': 'True', 'empty': 'False', 'target_path': 'None'}
+[0m23:14:30.675283 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a2cc5950>]}
+[0m23:14:30.797090 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a5dc0f10>]}
+[0m23:14:30.801420 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m23:14:30.989382 [debug] [MainThread]: checksum: b80718358155fc17c3559352095564dd56ada1cc1a1c0ef2e62c857e71583775, vars: {}, profile: , target: , version: 1.11.7
+[0m23:14:30.998344 [info ] [MainThread]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m23:14:31.001342 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'partial_parser', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a26f2cd0>]}
+[0m23:14:33.151183 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a1764d90>]}
+[0m23:14:33.288860 [debug] [MainThread]: Wrote artifact WritableManifest to /app/dbt/target/manifest.json
+[0m23:14:33.305252 [debug] [MainThread]: Wrote artifact SemanticManifest to /app/dbt/target/semantic_manifest.json
+[0m23:14:33.266875 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a1fe1e10>]}
+[0m23:14:33.269723 [info ] [MainThread]: Found 10 models, 464 macros
+[0m23:14:33.272302 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a17373d0>]}
+[0m23:14:33.278279 [info ] [MainThread]: 
+[0m23:14:33.280969 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
+[0m23:14:33.283540 [info ] [MainThread]: 
+[0m23:14:33.286650 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m23:14:33.296026 [debug] [ThreadPool]: Acquiring new postgres connection 'list_joblens'
+[0m23:14:33.558708 [debug] [ThreadPool]: Using postgres connection "list_joblens"
+[0m23:14:33.561515 [debug] [ThreadPool]: On list_joblens: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "list_joblens"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m23:14:33.563932 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m23:14:33.593545 [debug] [ThreadPool]: SQL status: SELECT 4 in 0.029 seconds
+[0m23:14:33.597044 [debug] [ThreadPool]: On list_joblens: Close
+[0m23:14:33.602019 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_joblens, now list_joblens_public)
+[0m23:14:33.610389 [debug] [ThreadPool]: Using postgres connection "list_joblens_public"
+[0m23:14:33.613118 [debug] [ThreadPool]: On list_joblens_public: BEGIN
+[0m23:14:33.615607 [debug] [ThreadPool]: Opening a new connection, currently in state closed
+[0m23:14:33.657854 [debug] [ThreadPool]: SQL status: BEGIN in 0.042 seconds
+[0m23:14:33.660311 [debug] [ThreadPool]: Using postgres connection "list_joblens_public"
+[0m23:14:33.662033 [debug] [ThreadPool]: On list_joblens_public: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "list_joblens_public"} */
+select
+      'joblens' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'public'
+    union all
+    select
+      'joblens' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'public'
+    union all
+    select
+      'joblens' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'public'
+  
+[0m23:14:33.722102 [debug] [ThreadPool]: SQL status: SELECT 4 in 0.057 seconds
+[0m23:14:33.725980 [debug] [ThreadPool]: On list_joblens_public: ROLLBACK
+[0m23:14:33.728860 [debug] [ThreadPool]: On list_joblens_public: Close
+[0m23:14:33.739323 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:33.741222 [debug] [MainThread]: On master: BEGIN
+[0m23:14:33.743579 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m23:14:33.754625 [debug] [MainThread]: SQL status: BEGIN in 0.011 seconds
+[0m23:14:33.757178 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:33.759650 [debug] [MainThread]: On master: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "master"} */
+with relation as (
+        select
+            pg_rewrite.ev_class as class,
+            pg_rewrite.oid as id
+        from pg_rewrite
+    ),
+    class as (
+        select
+            oid as id,
+            relname as name,
+            relnamespace as schema,
+            relkind as kind
+        from pg_class
+    ),
+    dependency as (
+        select distinct
+            pg_depend.objid as id,
+            pg_depend.refobjid as ref
+        from pg_depend
+    ),
+    schema as (
+        select
+            pg_namespace.oid as id,
+            pg_namespace.nspname as name
+        from pg_namespace
+        where nspname != 'information_schema' and nspname not like 'pg\_%'
+    ),
+    referenced as (
+        select
+            relation.id AS id,
+            referenced_class.name ,
+            referenced_class.schema ,
+            referenced_class.kind
+        from relation
+        join class as referenced_class on relation.class=referenced_class.id
+        where referenced_class.kind in ('r', 'v', 'm')
+    ),
+    relationships as (
+        select
+            referenced.name as referenced_name,
+            referenced.schema as referenced_schema_id,
+            dependent_class.name as dependent_name,
+            dependent_class.schema as dependent_schema_id,
+            referenced.kind as kind
+        from referenced
+        join dependency on referenced.id=dependency.id
+        join class as dependent_class on dependency.ref=dependent_class.id
+        where
+            (referenced.name != dependent_class.name or
+             referenced.schema != dependent_class.schema)
+    )
+
+    select
+        referenced_schema.name as referenced_schema,
+        relationships.referenced_name as referenced_name,
+        dependent_schema.name as dependent_schema,
+        relationships.dependent_name as dependent_name
+    from relationships
+    join schema as dependent_schema on relationships.dependent_schema_id=dependent_schema.id
+    join schema as referenced_schema on relationships.referenced_schema_id=referenced_schema.id
+    group by referenced_schema, referenced_name, dependent_schema, dependent_name
+    order by referenced_schema, referenced_name, dependent_schema, dependent_name;
+[0m23:14:33.777855 [debug] [MainThread]: SQL status: SELECT 0 in 0.016 seconds
+[0m23:14:33.780991 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a3bc0d10>]}
+[0m23:14:33.783811 [debug] [MainThread]: On master: ROLLBACK
+[0m23:14:33.786195 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:33.788192 [debug] [MainThread]: On master: BEGIN
+[0m23:14:33.791016 [debug] [MainThread]: SQL status: BEGIN in 0.001 seconds
+[0m23:14:33.794274 [debug] [MainThread]: On master: COMMIT
+[0m23:14:33.796248 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:33.798457 [debug] [MainThread]: On master: COMMIT
+[0m23:14:33.800910 [debug] [MainThread]: SQL status: COMMIT in 0.000 seconds
+[0m23:14:33.802925 [debug] [MainThread]: On master: Close
+[0m23:14:33.821955 [debug] [Thread-1 (]: Began running node model.joblens.bronze_jobs
+[0m23:14:33.822747 [debug] [Thread-2 (]: Began running node model.joblens.bronze_matches
+[0m23:14:33.823765 [debug] [Thread-3 (]: Began running node model.joblens.bronze_resumes
+[0m23:14:33.825658 [info ] [Thread-1 (]: 1 of 10 START sql view model public.bronze_jobs ................................ [RUN]
+[0m23:14:33.828403 [info ] [Thread-2 (]: 2 of 10 START sql view model public.bronze_matches ............................. [RUN]
+[0m23:14:33.831251 [info ] [Thread-3 (]: 3 of 10 START sql view model public.bronze_resumes ............................. [RUN]
+[0m23:14:33.834081 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly list_joblens_public, now model.joblens.bronze_jobs)
+[0m23:14:33.836821 [debug] [Thread-2 (]: Acquiring new postgres connection 'model.joblens.bronze_matches'
+[0m23:14:33.839657 [debug] [Thread-3 (]: Acquiring new postgres connection 'model.joblens.bronze_resumes'
+[0m23:14:33.841547 [debug] [Thread-1 (]: Began compiling node model.joblens.bronze_jobs
+[0m23:14:33.844393 [debug] [Thread-2 (]: Began compiling node model.joblens.bronze_matches
+[0m23:14:33.847001 [debug] [Thread-3 (]: Began compiling node model.joblens.bronze_resumes
+[0m23:14:33.858287 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.bronze_jobs"
+[0m23:14:33.864358 [debug] [Thread-2 (]: Writing injected SQL for node "model.joblens.bronze_matches"
+[0m23:14:33.871946 [debug] [Thread-3 (]: Writing injected SQL for node "model.joblens.bronze_resumes"
+[0m23:14:33.910376 [debug] [Thread-1 (]: Began executing node model.joblens.bronze_jobs
+[0m23:14:33.930368 [debug] [Thread-2 (]: Began executing node model.joblens.bronze_matches
+[0m23:14:33.967533 [debug] [Thread-3 (]: Began executing node model.joblens.bronze_resumes
+[0m23:14:33.983300 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.bronze_jobs"
+[0m23:14:33.979745 [debug] [Thread-2 (]: Writing runtime sql for node "model.joblens.bronze_matches"
+[0m23:14:33.990276 [debug] [Thread-3 (]: Writing runtime sql for node "model.joblens.bronze_resumes"
+[0m23:14:34.033552 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:14:34.035959 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: BEGIN
+[0m23:14:34.037083 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:14:34.039476 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:14:34.042208 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:14:34.042718 [debug] [Thread-2 (]: On model.joblens.bronze_matches: BEGIN
+[0m23:14:34.047534 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: BEGIN
+[0m23:14:34.050390 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m23:14:34.053274 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m23:14:34.109780 [debug] [Thread-1 (]: SQL status: BEGIN in 0.070 seconds
+[0m23:14:34.113045 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:14:34.115784 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+
+  create view "joblens"."public"."bronze_jobs__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    title,
+    company,
+    location,
+    salary_range,
+    job_description,
+    required_skills,
+    embedding,
+    source,
+    posted_at,
+    created_at
+FROM jobs
+  );
+[0m23:14:34.140085 [debug] [Thread-3 (]: SQL status: BEGIN in 0.087 seconds
+[0m23:14:34.142550 [debug] [Thread-2 (]: SQL status: BEGIN in 0.092 seconds
+[0m23:14:34.144745 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:14:34.146017 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.027 seconds
+[0m23:14:34.148617 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:14:34.151631 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+
+  create view "joblens"."public"."bronze_resumes__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    raw_text,
+    parsed_skills,
+    embedding,
+    created_at
+FROM resumes
+  );
+[0m23:14:34.168903 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:14:34.170382 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+
+  create view "joblens"."public"."bronze_matches__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    resume_id,
+    job_id,
+    overall_score,
+    semantic_score,
+    keyword_score,
+    classifier_score,
+    fit_label,
+    confidence,
+    matched_skills,
+    missing_skills,
+    experience_gap,
+    summary,
+    created_at
+FROM matches
+  );
+[0m23:14:34.175415 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+alter table "joblens"."public"."bronze_jobs__dbt_tmp" rename to "bronze_jobs"
+[0m23:14:34.185522 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.004 seconds
+[0m23:14:34.188954 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.010 seconds
+[0m23:14:34.221712 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.048 seconds
+[0m23:14:34.237808 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:14:34.239139 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: COMMIT
+[0m23:14:34.248383 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:14:34.250056 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+alter table "joblens"."public"."bronze_matches__dbt_tmp" rename to "bronze_matches"
+[0m23:14:34.252481 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:14:34.254926 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+alter table "joblens"."public"."bronze_resumes__dbt_tmp" rename to "bronze_resumes"
+[0m23:14:34.258261 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:34.259570 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: COMMIT
+[0m23:14:34.263582 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:34.266209 [debug] [Thread-2 (]: On model.joblens.bronze_matches: COMMIT
+[0m23:14:34.272558 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: COMMIT
+[0m23:14:34.273271 [debug] [Thread-1 (]: SQL status: COMMIT in 0.004 seconds
+[0m23:14:34.275293 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:14:34.277925 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:14:34.301881 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."bronze_jobs__dbt_backup"
+[0m23:14:34.302723 [debug] [Thread-2 (]: On model.joblens.bronze_matches: COMMIT
+[0m23:14:34.305574 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: COMMIT
+[0m23:14:34.316881 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:14:34.320902 [debug] [Thread-2 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:14:34.322711 [debug] [Thread-3 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:14:34.323489 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+drop view if exists "joblens"."public"."bronze_jobs__dbt_backup" cascade
+[0m23:14:34.329611 [debug] [Thread-2 (]: Applying DROP to: "joblens"."public"."bronze_matches__dbt_backup"
+[0m23:14:34.337193 [debug] [Thread-3 (]: Applying DROP to: "joblens"."public"."bronze_resumes__dbt_backup"
+[0m23:14:34.342882 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:14:34.344077 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.004 seconds
+[0m23:14:34.347788 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:14:34.350466 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+drop view if exists "joblens"."public"."bronze_matches__dbt_backup" cascade
+[0m23:14:34.355322 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: Close
+[0m23:14:34.358304 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+drop view if exists "joblens"."public"."bronze_resumes__dbt_backup" cascade
+[0m23:14:34.362138 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:34.367275 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0999c85510>]}
+[0m23:14:34.368972 [debug] [Thread-3 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:34.372339 [debug] [Thread-2 (]: On model.joblens.bronze_matches: Close
+[0m23:14:34.375776 [info ] [Thread-1 (]: 1 of 10 OK created sql view model public.bronze_jobs ........................... [[32mCREATE VIEW[0m in 0.53s]
+[0m23:14:34.380842 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: Close
+[0m23:14:34.384873 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0999c79b90>]}
+[0m23:14:34.386909 [debug] [Thread-1 (]: Finished running node model.joblens.bronze_jobs
+[0m23:14:34.389654 [debug] [Thread-3 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0999c3b590>]}
+[0m23:14:34.393455 [info ] [Thread-2 (]: 2 of 10 OK created sql view model public.bronze_matches ........................ [[32mCREATE VIEW[0m in 0.55s]
+[0m23:14:34.396959 [debug] [Thread-4 (]: Began running node model.joblens.gold_market_skills
+[0m23:14:34.397805 [debug] [Thread-1 (]: Began running node model.joblens.silver_jobs
+[0m23:14:34.400757 [info ] [Thread-3 (]: 3 of 10 OK created sql view model public.bronze_resumes ........................ [[32mCREATE VIEW[0m in 0.55s]
+[0m23:14:34.404044 [debug] [Thread-2 (]: Finished running node model.joblens.bronze_matches
+[0m23:14:34.407619 [info ] [Thread-4 (]: 4 of 10 START sql view model public.gold_market_skills ......................... [RUN]
+[0m23:14:34.410851 [info ] [Thread-1 (]: 5 of 10 START sql view model public.silver_jobs ................................ [RUN]
+[0m23:14:34.413824 [debug] [Thread-3 (]: Finished running node model.joblens.bronze_resumes
+[0m23:14:34.416952 [debug] [Thread-2 (]: Began running node model.joblens.silver_matches
+[0m23:14:34.418996 [debug] [Thread-4 (]: Acquiring new postgres connection 'model.joblens.gold_market_skills'
+[0m23:14:34.422418 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_jobs, now model.joblens.silver_jobs)
+[0m23:14:34.427375 [info ] [Thread-2 (]: 6 of 10 START sql view model public.silver_matches ............................. [RUN]
+[0m23:14:34.430389 [debug] [Thread-4 (]: Began compiling node model.joblens.gold_market_skills
+[0m23:14:34.433227 [debug] [Thread-1 (]: Began compiling node model.joblens.silver_jobs
+[0m23:14:34.435766 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_matches, now model.joblens.silver_matches)
+[0m23:14:34.442152 [debug] [Thread-4 (]: Writing injected SQL for node "model.joblens.gold_market_skills"
+[0m23:14:34.447994 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.silver_jobs"
+[0m23:14:34.451134 [debug] [Thread-2 (]: Began compiling node model.joblens.silver_matches
+[0m23:14:34.460608 [debug] [Thread-2 (]: Writing injected SQL for node "model.joblens.silver_matches"
+[0m23:14:34.480310 [debug] [Thread-1 (]: Began executing node model.joblens.silver_jobs
+[0m23:14:34.481217 [debug] [Thread-4 (]: Began executing node model.joblens.gold_market_skills
+[0m23:14:34.489542 [debug] [Thread-2 (]: Began executing node model.joblens.silver_matches
+[0m23:14:34.490444 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.silver_jobs"
+[0m23:14:34.497282 [debug] [Thread-4 (]: Writing runtime sql for node "model.joblens.gold_market_skills"
+[0m23:14:34.503170 [debug] [Thread-2 (]: Writing runtime sql for node "model.joblens.silver_matches"
+[0m23:14:34.531604 [debug] [Thread-2 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:14:34.532897 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:14:34.535434 [debug] [Thread-2 (]: On model.joblens.silver_matches: BEGIN
+[0m23:14:34.539594 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: BEGIN
+[0m23:14:34.541188 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:14:34.544268 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
+[0m23:14:34.548102 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m23:14:34.551108 [debug] [Thread-1 (]: On model.joblens.silver_jobs: BEGIN
+[0m23:14:34.559144 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:14:34.567593 [debug] [Thread-2 (]: SQL status: BEGIN in 0.023 seconds
+[0m23:14:34.570007 [debug] [Thread-4 (]: SQL status: BEGIN in 0.022 seconds
+[0m23:14:34.572359 [debug] [Thread-1 (]: SQL status: BEGIN in 0.013 seconds
+[0m23:14:34.573440 [debug] [Thread-2 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:14:34.576719 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:14:34.579018 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:14:34.581334 [debug] [Thread-2 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+
+  create view "joblens"."public"."silver_matches__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    resume_id,
+    job_id,
+    overall_score,
+    semantic_score,
+    keyword_score,
+    classifier_score,
+    fit_label,
+    confidence,
+    matched_skills,
+    missing_skills,
+    experience_gap,
+    summary,
+    created_at
+FROM "joblens"."public"."bronze_matches"
+WHERE overall_score IS NOT NULL
+  AND overall_score BETWEEN 0 AND 100
+  );
+[0m23:14:34.584456 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+
+  create view "joblens"."public"."gold_market_skills__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    skill_name,
+    COUNT(*) AS demand_count
+FROM "joblens"."public"."bronze_jobs",
+     jsonb_array_elements_text(required_skills::jsonb) AS skill_name
+GROUP BY skill_name
+ORDER BY demand_count DESC
+  );
+[0m23:14:34.587846 [debug] [Thread-1 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+
+  create view "joblens"."public"."silver_jobs__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    title,
+    company,
+    CASE
+        WHEN location ILIKE '%remote%'                          THEN 'Remote'
+        WHEN location ILIKE '%new york%' OR location ILIKE '%nyc%' THEN 'New York, NY'
+        WHEN location ILIKE '%san francisco%' OR location ILIKE '% sf%' THEN 'San Francisco, CA'
+        WHEN location ILIKE '%austin%'                         THEN 'Austin, TX'
+        WHEN location ILIKE '%seattle%'                        THEN 'Seattle, WA'
+        ELSE location
+    END AS location,
+    -- Normalize salary to a rough midpoint (numeric) for aggregations
+    salary_range,
+    job_description,
+    required_skills,
+    source,
+    posted_at,
+    created_at
+FROM "joblens"."public"."bronze_jobs"
+  );
+[0m23:14:34.600586 [debug] [Thread-4 (]: SQL status: CREATE VIEW in 0.008 seconds
+[0m23:14:34.607524 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:14:34.610352 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+alter table "joblens"."public"."gold_market_skills__dbt_tmp" rename to "gold_market_skills"
+[0m23:14:34.614263 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:34.618412 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: COMMIT
+[0m23:14:34.620182 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.030 seconds
+[0m23:14:34.621588 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:14:34.622501 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.028 seconds
+[0m23:14:34.628562 [debug] [Thread-2 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:14:34.631945 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: COMMIT
+[0m23:14:34.639346 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:14:34.646306 [debug] [Thread-2 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+alter table "joblens"."public"."silver_matches__dbt_tmp" rename to "silver_matches"
+[0m23:14:34.651255 [debug] [Thread-1 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+alter table "joblens"."public"."silver_jobs__dbt_tmp" rename to "silver_jobs"
+[0m23:14:34.652094 [debug] [Thread-4 (]: SQL status: COMMIT in 0.003 seconds
+[0m23:14:34.655459 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:34.657586 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:34.662394 [debug] [Thread-4 (]: Applying DROP to: "joblens"."public"."gold_market_skills__dbt_backup"
+[0m23:14:34.666011 [debug] [Thread-2 (]: On model.joblens.silver_matches: COMMIT
+[0m23:14:34.669469 [debug] [Thread-1 (]: On model.joblens.silver_jobs: COMMIT
+[0m23:14:34.672007 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:14:34.674837 [debug] [Thread-2 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:14:34.677990 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:14:34.680316 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+drop view if exists "joblens"."public"."gold_market_skills__dbt_backup" cascade
+[0m23:14:34.682729 [debug] [Thread-2 (]: On model.joblens.silver_matches: COMMIT
+[0m23:14:34.684947 [debug] [Thread-1 (]: On model.joblens.silver_jobs: COMMIT
+[0m23:14:34.688056 [debug] [Thread-4 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:34.692071 [debug] [Thread-2 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:14:34.695597 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: Close
+[0m23:14:34.696233 [debug] [Thread-1 (]: SQL status: COMMIT in 0.005 seconds
+[0m23:14:34.700884 [debug] [Thread-2 (]: Applying DROP to: "joblens"."public"."silver_matches__dbt_backup"
+[0m23:14:34.703955 [debug] [Thread-4 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0999cbfcd0>]}
+[0m23:14:34.709286 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."silver_jobs__dbt_backup"
+[0m23:14:34.712474 [debug] [Thread-2 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:14:34.715832 [info ] [Thread-4 (]: 4 of 10 OK created sql view model public.gold_market_skills .................... [[32mCREATE VIEW[0m in 0.28s]
+[0m23:14:34.718584 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:14:34.721557 [debug] [Thread-2 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+drop view if exists "joblens"."public"."silver_matches__dbt_backup" cascade
+[0m23:14:34.724772 [debug] [Thread-4 (]: Finished running node model.joblens.gold_market_skills
+[0m23:14:34.727032 [debug] [Thread-1 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+drop view if exists "joblens"."public"."silver_jobs__dbt_backup" cascade
+[0m23:14:34.730942 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:34.735553 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:34.738603 [debug] [Thread-2 (]: On model.joblens.silver_matches: Close
+[0m23:14:34.743578 [debug] [Thread-1 (]: On model.joblens.silver_jobs: Close
+[0m23:14:34.746532 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a01e1ad0>]}
+[0m23:14:34.749116 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0998337550>]}
+[0m23:14:34.751697 [info ] [Thread-2 (]: 6 of 10 OK created sql view model public.silver_matches ........................ [[32mCREATE VIEW[0m in 0.31s]
+[0m23:14:34.755024 [info ] [Thread-1 (]: 5 of 10 OK created sql view model public.silver_jobs ........................... [[32mCREATE VIEW[0m in 0.33s]
+[0m23:14:34.758575 [debug] [Thread-2 (]: Finished running node model.joblens.silver_matches
+[0m23:14:34.761455 [debug] [Thread-1 (]: Finished running node model.joblens.silver_jobs
+[0m23:14:34.765941 [debug] [Thread-3 (]: Began running node model.joblens.gold_resume_gaps
+[0m23:14:34.766823 [debug] [Thread-4 (]: Began running node model.joblens.gold_score_distribution
+[0m23:14:34.769015 [debug] [Thread-2 (]: Began running node model.joblens.gold_company_insights
+[0m23:14:34.770020 [debug] [Thread-1 (]: Began running node model.joblens.gold_top_roles
+[0m23:14:34.773113 [info ] [Thread-3 (]: 7 of 10 START sql view model public.gold_resume_gaps ........................... [RUN]
+[0m23:14:34.775961 [info ] [Thread-4 (]: 8 of 10 START sql view model public.gold_score_distribution .................... [RUN]
+[0m23:14:34.778468 [info ] [Thread-2 (]: 9 of 10 START sql view model public.gold_company_insights ...................... [RUN]
+[0m23:14:34.781501 [info ] [Thread-1 (]: 10 of 10 START sql view model public.gold_top_roles ............................ [RUN]
+[0m23:14:34.784102 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_resumes, now model.joblens.gold_resume_gaps)
+[0m23:14:34.786729 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly model.joblens.gold_market_skills, now model.joblens.gold_score_distribution)
+[0m23:14:34.789382 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.joblens.silver_matches, now model.joblens.gold_company_insights)
+[0m23:14:34.791853 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly model.joblens.silver_jobs, now model.joblens.gold_top_roles)
+[0m23:14:34.794057 [debug] [Thread-3 (]: Began compiling node model.joblens.gold_resume_gaps
+[0m23:14:34.796989 [debug] [Thread-4 (]: Began compiling node model.joblens.gold_score_distribution
+[0m23:14:34.798930 [debug] [Thread-2 (]: Began compiling node model.joblens.gold_company_insights
+[0m23:14:34.801040 [debug] [Thread-1 (]: Began compiling node model.joblens.gold_top_roles
+[0m23:14:34.810300 [debug] [Thread-3 (]: Writing injected SQL for node "model.joblens.gold_resume_gaps"
+[0m23:14:34.815915 [debug] [Thread-4 (]: Writing injected SQL for node "model.joblens.gold_score_distribution"
+[0m23:14:34.821599 [debug] [Thread-2 (]: Writing injected SQL for node "model.joblens.gold_company_insights"
+[0m23:14:34.828315 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.gold_top_roles"
+[0m23:14:34.841609 [debug] [Thread-3 (]: Began executing node model.joblens.gold_resume_gaps
+[0m23:14:34.850775 [debug] [Thread-2 (]: Began executing node model.joblens.gold_company_insights
+[0m23:14:34.855296 [debug] [Thread-3 (]: Writing runtime sql for node "model.joblens.gold_resume_gaps"
+[0m23:14:34.863248 [debug] [Thread-1 (]: Began executing node model.joblens.gold_top_roles
+[0m23:14:34.864067 [debug] [Thread-4 (]: Began executing node model.joblens.gold_score_distribution
+[0m23:14:34.866240 [debug] [Thread-2 (]: Writing runtime sql for node "model.joblens.gold_company_insights"
+[0m23:14:34.880869 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.gold_top_roles"
+[0m23:14:34.889640 [debug] [Thread-4 (]: Writing runtime sql for node "model.joblens.gold_score_distribution"
+[0m23:14:34.895465 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:14:34.900806 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: BEGIN
+[0m23:14:34.902079 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:14:34.905085 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
+[0m23:14:34.907948 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:14:34.910644 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: BEGIN
+[0m23:14:34.913652 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:14:34.918700 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: BEGIN
+[0m23:14:34.921877 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
+[0m23:14:34.925232 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: BEGIN
+[0m23:14:34.926739 [debug] [Thread-3 (]: SQL status: BEGIN in 0.022 seconds
+[0m23:14:34.929602 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:14:34.935942 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
+[0m23:14:34.939365 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:14:34.948100 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+
+  create view "joblens"."public"."gold_resume_gaps__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    resume_id,
+    skill_name,
+    COUNT(*) AS missing_count
+FROM "joblens"."public"."silver_matches",
+     jsonb_array_elements_text(missing_skills::jsonb) AS skill_name
+GROUP BY resume_id, skill_name
+  );
+[0m23:14:34.954889 [debug] [Thread-1 (]: SQL status: BEGIN in 0.025 seconds
+[0m23:14:34.958577 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.007 seconds
+[0m23:14:34.959524 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:14:34.967166 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:14:34.971519 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+
+  create view "joblens"."public"."gold_top_roles__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    m.resume_id,
+    TRIM(REGEXP_REPLACE(j.title, '\s*[–\-].*$', '')) AS role_type,
+    ROUND(AVG(m.overall_score)::numeric, 1)           AS avg_score,
+    COUNT(*)                                           AS job_count
+FROM "joblens"."public"."silver_matches" m
+JOIN "joblens"."public"."silver_jobs" j ON m.job_id = j.id
+GROUP BY m.resume_id, role_type
+  );
+[0m23:14:34.976489 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+alter table "joblens"."public"."gold_resume_gaps__dbt_tmp" rename to "gold_resume_gaps"
+[0m23:14:34.979244 [debug] [Thread-2 (]: SQL status: BEGIN in 0.057 seconds
+[0m23:14:34.986548 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m23:14:34.989265 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:14:34.992249 [debug] [Thread-4 (]: SQL status: BEGIN in 0.056 seconds
+[0m23:14:34.997601 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: COMMIT
+[0m23:14:35.000689 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+
+  create view "joblens"."public"."gold_company_insights__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    j.company,
+    ROUND(AVG(m.overall_score)::numeric,  1) AS avg_score,
+    ROUND(AVG(m.keyword_score)::numeric,  1) AS avg_skill_overlap,
+    COUNT(*)                                  AS match_count
+FROM "joblens"."public"."silver_matches" m
+JOIN "joblens"."public"."silver_jobs" j ON m.job_id = j.id
+GROUP BY j.company
+ORDER BY avg_score DESC
+  );
+[0m23:14:35.004247 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:14:35.008673 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:14:35.013562 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+
+  create view "joblens"."public"."gold_score_distribution__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    CASE
+        WHEN overall_score <= 30 THEN '0-30'
+        WHEN overall_score <= 50 THEN '31-50'
+        WHEN overall_score <= 70 THEN '51-70'
+        WHEN overall_score <= 85 THEN '71-85'
+        ELSE '86-100'
+    END AS score_bucket,
+    COUNT(*) AS job_count
+FROM "joblens"."public"."silver_matches"
+GROUP BY score_bucket
+  );
+[0m23:14:35.017000 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: COMMIT
+[0m23:14:35.021431 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.010 seconds
+[0m23:14:35.026453 [debug] [Thread-3 (]: SQL status: COMMIT in 0.003 seconds
+[0m23:14:35.031749 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:14:35.034190 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.052 seconds
+[0m23:14:35.038749 [debug] [Thread-3 (]: Applying DROP to: "joblens"."public"."gold_resume_gaps__dbt_backup"
+[0m23:14:35.041957 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+alter table "joblens"."public"."gold_company_insights__dbt_tmp" rename to "gold_company_insights"
+[0m23:14:35.049084 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:14:35.050399 [debug] [Thread-4 (]: SQL status: CREATE VIEW in 0.029 seconds
+[0m23:14:35.052597 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:14:35.057175 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:35.058555 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+alter table "joblens"."public"."gold_top_roles__dbt_tmp" rename to "gold_top_roles"
+[0m23:14:35.065157 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:14:35.067759 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+drop view if exists "joblens"."public"."gold_resume_gaps__dbt_backup" cascade
+[0m23:14:35.071618 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: COMMIT
+[0m23:14:35.075284 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:35.076459 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+alter table "joblens"."public"."gold_score_distribution__dbt_tmp" rename to "gold_score_distribution"
+[0m23:14:35.079694 [debug] [Thread-3 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:35.081325 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:14:35.084485 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: COMMIT
+[0m23:14:35.088613 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:14:35.091103 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: Close
+[0m23:14:35.092889 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: COMMIT
+[0m23:14:35.095125 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:14:35.098933 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: COMMIT
+[0m23:14:35.101558 [debug] [Thread-3 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0998340f50>]}
+[0m23:14:35.108403 [debug] [Thread-2 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:14:35.109451 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: COMMIT
+[0m23:14:35.112281 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:14:35.115269 [info ] [Thread-3 (]: 7 of 10 OK created sql view model public.gold_resume_gaps ...................... [[32mCREATE VIEW[0m in 0.32s]
+[0m23:14:35.120511 [debug] [Thread-2 (]: Applying DROP to: "joblens"."public"."gold_company_insights__dbt_backup"
+[0m23:14:35.124832 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: COMMIT
+[0m23:14:35.125519 [debug] [Thread-1 (]: SQL status: COMMIT in 0.003 seconds
+[0m23:14:35.127335 [debug] [Thread-3 (]: Finished running node model.joblens.gold_resume_gaps
+[0m23:14:35.129827 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:14:35.137172 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."gold_top_roles__dbt_backup"
+[0m23:14:35.138171 [debug] [Thread-4 (]: SQL status: COMMIT in 0.006 seconds
+[0m23:14:35.141819 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+drop view if exists "joblens"."public"."gold_company_insights__dbt_backup" cascade
+[0m23:14:35.144366 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:14:35.150706 [debug] [Thread-4 (]: Applying DROP to: "joblens"."public"."gold_score_distribution__dbt_backup"
+[0m23:14:35.154787 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:35.156819 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+drop view if exists "joblens"."public"."gold_top_roles__dbt_backup" cascade
+[0m23:14:35.160775 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:14:35.165752 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: Close
+[0m23:14:35.169690 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:35.172144 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+drop view if exists "joblens"."public"."gold_score_distribution__dbt_backup" cascade
+[0m23:14:35.176133 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f099830aad0>]}
+[0m23:14:35.180157 [debug] [Thread-1 (]: On model.joblens.gold_top_roles: Close
+[0m23:14:35.183709 [debug] [Thread-4 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:14:35.186369 [info ] [Thread-2 (]: 9 of 10 OK created sql view model public.gold_company_insights ................. [[32mCREATE VIEW[0m in 0.39s]
+[0m23:14:35.189885 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0998350b90>]}
+[0m23:14:35.193404 [debug] [Thread-4 (]: On model.joblens.gold_score_distribution: Close
+[0m23:14:35.196570 [debug] [Thread-2 (]: Finished running node model.joblens.gold_company_insights
+[0m23:14:35.200002 [info ] [Thread-1 (]: 10 of 10 OK created sql view model public.gold_top_roles ....................... [[32mCREATE VIEW[0m in 0.40s]
+[0m23:14:35.202897 [debug] [Thread-4 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '5f14213a-5d9a-47eb-a2a0-59509c1cfdd4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f0999cd4710>]}
+[0m23:14:35.207601 [debug] [Thread-1 (]: Finished running node model.joblens.gold_top_roles
+[0m23:14:35.211367 [info ] [Thread-4 (]: 8 of 10 OK created sql view model public.gold_score_distribution ............... [[32mCREATE VIEW[0m in 0.42s]
+[0m23:14:35.219410 [debug] [Thread-4 (]: Finished running node model.joblens.gold_score_distribution
+[0m23:14:35.227167 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:35.229655 [debug] [MainThread]: On master: BEGIN
+[0m23:14:35.231801 [debug] [MainThread]: Opening a new connection, currently in state closed
+[0m23:14:35.243955 [debug] [MainThread]: SQL status: BEGIN in 0.012 seconds
+[0m23:14:35.247198 [debug] [MainThread]: On master: COMMIT
+[0m23:14:35.250203 [debug] [MainThread]: Using postgres connection "master"
+[0m23:14:35.252425 [debug] [MainThread]: On master: COMMIT
+[0m23:14:35.255893 [debug] [MainThread]: SQL status: COMMIT in 0.001 seconds
+[0m23:14:35.258714 [debug] [MainThread]: On master: Close
+[0m23:14:35.261841 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m23:14:35.264875 [debug] [MainThread]: Connection 'model.joblens.gold_top_roles' was properly closed.
+[0m23:14:35.267407 [debug] [MainThread]: Connection 'model.joblens.gold_company_insights' was properly closed.
+[0m23:14:35.270080 [debug] [MainThread]: Connection 'model.joblens.gold_resume_gaps' was properly closed.
+[0m23:14:35.273133 [debug] [MainThread]: Connection 'model.joblens.gold_score_distribution' was properly closed.
+[0m23:14:35.276242 [info ] [MainThread]: 
+[0m23:14:35.279146 [info ] [MainThread]: Finished running 10 view models in 0 hours 0 minutes and 1.99 seconds (1.99s).
+[0m23:14:35.285838 [debug] [MainThread]: Command end result
+[0m23:14:35.386027 [debug] [MainThread]: Wrote artifact WritableManifest to /app/dbt/target/manifest.json
+[0m23:14:35.400024 [debug] [MainThread]: Wrote artifact SemanticManifest to /app/dbt/target/semantic_manifest.json
+[0m23:14:35.421418 [debug] [MainThread]: Wrote artifact RunExecutionResult to /app/dbt/target/run_results.json
+[0m23:14:35.423932 [info ] [MainThread]: 
+[0m23:14:35.426770 [info ] [MainThread]: [32mCompleted successfully[0m
+[0m23:14:35.429570 [info ] [MainThread]: 
+[0m23:14:35.431829 [info ] [MainThread]: Done. PASS=10 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=10
+[0m23:14:35.438830 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 5.6072063, "process_in_blocks": "41712", "process_kernel_time": 4.22964, "process_mem_max_rss": "132808", "process_out_blocks": "712", "process_user_time": 5.186926}
+[0m23:14:35.442400 [debug] [MainThread]: Command `dbt run` succeeded at 23:14:35.442084 after 5.61 seconds
+[0m23:14:35.445281 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a79658d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a2fddf50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f09a77f33d0>]}
+[0m23:14:35.448566 [debug] [MainThread]: Flushing usage events
+[0m23:14:35.698790 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m23:26:37.600241 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9754e0dd0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9753ded90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc975fd5d50>]}
+
+
+============================== 23:26:37.625476 | da924dcd-915f-4bb9-8978-6fc9ca32059e ==============================
+[0m23:26:37.625476 [info ] [MainThread]: Running with dbt=1.11.7
+[0m23:26:37.628815 [debug] [MainThread]: running dbt with arguments {'use_experimental_parser': 'False', 'introspect': 'True', 'fail_fast': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'partial_parse': 'True', 'empty': 'False', 'write_json': 'True', 'indirect_selection': 'eager', 'warn_error': 'None', 'version_check': 'True', 'static_parser': 'True', 'target_path': 'None', 'log_cache_events': 'False', 'use_colors': 'True', 'profiles_dir': '/app/dbt', 'send_anonymous_usage_stats': 'True', 'cache_selected_only': 'False', 'quiet': 'False', 'debug': 'False', 'log_format': 'default', 'log_path': '/app/dbt/logs', 'printer_width': '80', 'invocation_command': 'dbt run --project-dir /app/dbt --profiles-dir /app/dbt'}
+[0m23:26:38.643668 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9754e9f50>]}
+[0m23:26:38.767354 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'adapter_info', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc974f60950>]}
+[0m23:26:38.773437 [info ] [MainThread]: Registered adapter: postgres=1.8.2
+[0m23:26:38.936605 [debug] [MainThread]: checksum: b80718358155fc17c3559352095564dd56ada1cc1a1c0ef2e62c857e71583775, vars: {}, profile: , target: , version: 1.11.7
+[0m23:26:39.636630 [debug] [MainThread]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m23:26:39.638430 [debug] [MainThread]: Nothing changed, skipping partial parsing.
+[0m23:26:39.640791 [debug] [MainThread]: Partial parsing enabled, no changes found, skipping parsing
+[0m23:26:39.676094 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'load_project', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9743ea310>]}
+[0m23:26:39.796765 [debug] [MainThread]: Wrote artifact WritableManifest to /app/dbt/target/manifest.json
+[0m23:26:39.812744 [debug] [MainThread]: Wrote artifact SemanticManifest to /app/dbt/target/semantic_manifest.json
+[0m23:26:39.917731 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc974f0df10>]}
+[0m23:26:39.921555 [info ] [MainThread]: Found 10 models, 464 macros
+[0m23:26:39.924147 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9779bca90>]}
+[0m23:26:39.930995 [info ] [MainThread]: 
+[0m23:26:39.934140 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
+[0m23:26:39.937380 [info ] [MainThread]: 
+[0m23:26:39.941029 [debug] [MainThread]: Acquiring new postgres connection 'master'
+[0m23:26:39.954662 [debug] [ThreadPool]: Acquiring new postgres connection 'list_joblens'
+[0m23:26:40.365135 [debug] [ThreadPool]: Using postgres connection "list_joblens"
+[0m23:26:40.367501 [debug] [ThreadPool]: On list_joblens: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "list_joblens"} */
+
+    select distinct nspname from pg_namespace
+  
+[0m23:26:40.369700 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m23:26:40.488140 [debug] [ThreadPool]: SQL status: SELECT 4 in 0.118 seconds
+[0m23:26:40.491943 [debug] [ThreadPool]: On list_joblens: Close
+[0m23:26:40.497946 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_joblens, now list_joblens_public)
+[0m23:26:40.507119 [debug] [ThreadPool]: Using postgres connection "list_joblens_public"
+[0m23:26:40.509353 [debug] [ThreadPool]: On list_joblens_public: BEGIN
+[0m23:26:40.511552 [debug] [ThreadPool]: Opening a new connection, currently in state closed
+[0m23:26:40.527194 [debug] [ThreadPool]: SQL status: BEGIN in 0.015 seconds
+[0m23:26:40.530373 [debug] [ThreadPool]: Using postgres connection "list_joblens_public"
+[0m23:26:40.533214 [debug] [ThreadPool]: On list_joblens_public: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "list_joblens_public"} */
+select
+      'joblens' as database,
+      tablename as name,
+      schemaname as schema,
+      'table' as type
+    from pg_tables
+    where schemaname ilike 'public'
+    union all
+    select
+      'joblens' as database,
+      viewname as name,
+      schemaname as schema,
+      'view' as type
+    from pg_views
+    where schemaname ilike 'public'
+    union all
+    select
+      'joblens' as database,
+      matviewname as name,
+      schemaname as schema,
+      'materialized_view' as type
+    from pg_matviews
+    where schemaname ilike 'public'
+  
+[0m23:26:40.603854 [debug] [ThreadPool]: SQL status: SELECT 14 in 0.067 seconds
+[0m23:26:40.607344 [debug] [ThreadPool]: On list_joblens_public: ROLLBACK
+[0m23:26:40.610427 [debug] [ThreadPool]: On list_joblens_public: Close
+[0m23:26:40.622154 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:40.624482 [debug] [MainThread]: On master: BEGIN
+[0m23:26:40.626850 [debug] [MainThread]: Opening a new connection, currently in state init
+[0m23:26:40.694269 [debug] [MainThread]: SQL status: BEGIN in 0.067 seconds
+[0m23:26:40.696710 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:40.699857 [debug] [MainThread]: On master: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "connection_name": "master"} */
+with relation as (
+        select
+            pg_rewrite.ev_class as class,
+            pg_rewrite.oid as id
+        from pg_rewrite
+    ),
+    class as (
+        select
+            oid as id,
+            relname as name,
+            relnamespace as schema,
+            relkind as kind
+        from pg_class
+    ),
+    dependency as (
+        select distinct
+            pg_depend.objid as id,
+            pg_depend.refobjid as ref
+        from pg_depend
+    ),
+    schema as (
+        select
+            pg_namespace.oid as id,
+            pg_namespace.nspname as name
+        from pg_namespace
+        where nspname != 'information_schema' and nspname not like 'pg\_%'
+    ),
+    referenced as (
+        select
+            relation.id AS id,
+            referenced_class.name ,
+            referenced_class.schema ,
+            referenced_class.kind
+        from relation
+        join class as referenced_class on relation.class=referenced_class.id
+        where referenced_class.kind in ('r', 'v', 'm')
+    ),
+    relationships as (
+        select
+            referenced.name as referenced_name,
+            referenced.schema as referenced_schema_id,
+            dependent_class.name as dependent_name,
+            dependent_class.schema as dependent_schema_id,
+            referenced.kind as kind
+        from referenced
+        join dependency on referenced.id=dependency.id
+        join class as dependent_class on dependency.ref=dependent_class.id
+        where
+            (referenced.name != dependent_class.name or
+             referenced.schema != dependent_class.schema)
+    )
+
+    select
+        referenced_schema.name as referenced_schema,
+        relationships.referenced_name as referenced_name,
+        dependent_schema.name as dependent_schema,
+        relationships.dependent_name as dependent_name
+    from relationships
+    join schema as dependent_schema on relationships.dependent_schema_id=dependent_schema.id
+    join schema as referenced_schema on relationships.referenced_schema_id=referenced_schema.id
+    group by referenced_schema, referenced_name, dependent_schema, dependent_name
+    order by referenced_schema, referenced_name, dependent_schema, dependent_name;
+[0m23:26:40.797394 [debug] [MainThread]: SQL status: SELECT 12 in 0.095 seconds
+[0m23:26:40.805765 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9753df3d0>]}
+[0m23:26:40.808046 [debug] [MainThread]: On master: ROLLBACK
+[0m23:26:40.812080 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:40.815236 [debug] [MainThread]: On master: BEGIN
+[0m23:26:40.819486 [debug] [MainThread]: SQL status: BEGIN in 0.001 seconds
+[0m23:26:40.823078 [debug] [MainThread]: On master: COMMIT
+[0m23:26:40.825615 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:40.828545 [debug] [MainThread]: On master: COMMIT
+[0m23:26:40.831753 [debug] [MainThread]: SQL status: COMMIT in 0.001 seconds
+[0m23:26:40.834742 [debug] [MainThread]: On master: Close
+[0m23:26:40.859414 [debug] [Thread-1 (]: Began running node model.joblens.bronze_jobs
+[0m23:26:40.860829 [debug] [Thread-2 (]: Began running node model.joblens.bronze_matches
+[0m23:26:40.861668 [debug] [Thread-3 (]: Began running node model.joblens.bronze_resumes
+[0m23:26:40.864394 [info ] [Thread-1 (]: 1 of 10 START sql view model public.bronze_jobs ................................ [RUN]
+[0m23:26:40.868038 [info ] [Thread-2 (]: 2 of 10 START sql view model public.bronze_matches ............................. [RUN]
+[0m23:26:40.871982 [info ] [Thread-3 (]: 3 of 10 START sql view model public.bronze_resumes ............................. [RUN]
+[0m23:26:40.874667 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly list_joblens_public, now model.joblens.bronze_jobs)
+[0m23:26:40.877773 [debug] [Thread-2 (]: Acquiring new postgres connection 'model.joblens.bronze_matches'
+[0m23:26:40.880805 [debug] [Thread-3 (]: Acquiring new postgres connection 'model.joblens.bronze_resumes'
+[0m23:26:40.883337 [debug] [Thread-1 (]: Began compiling node model.joblens.bronze_jobs
+[0m23:26:40.885912 [debug] [Thread-2 (]: Began compiling node model.joblens.bronze_matches
+[0m23:26:40.888782 [debug] [Thread-3 (]: Began compiling node model.joblens.bronze_resumes
+[0m23:26:40.902085 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.bronze_jobs"
+[0m23:26:40.910849 [debug] [Thread-2 (]: Writing injected SQL for node "model.joblens.bronze_matches"
+[0m23:26:40.917454 [debug] [Thread-3 (]: Writing injected SQL for node "model.joblens.bronze_resumes"
+[0m23:26:40.933935 [debug] [Thread-1 (]: Began executing node model.joblens.bronze_jobs
+[0m23:26:40.936330 [debug] [Thread-2 (]: Began executing node model.joblens.bronze_matches
+[0m23:26:40.943731 [debug] [Thread-3 (]: Began executing node model.joblens.bronze_resumes
+[0m23:26:41.099098 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.bronze_jobs"
+[0m23:26:41.102871 [debug] [Thread-2 (]: Writing runtime sql for node "model.joblens.bronze_matches"
+[0m23:26:41.096333 [debug] [Thread-3 (]: Writing runtime sql for node "model.joblens.bronze_resumes"
+[0m23:26:41.121455 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.125776 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.127078 [debug] [Thread-2 (]: On model.joblens.bronze_matches: BEGIN
+[0m23:26:41.128873 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.132129 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: BEGIN
+[0m23:26:41.136799 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m23:26:41.140451 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: BEGIN
+[0m23:26:41.144319 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m23:26:41.151409 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:26:41.178586 [debug] [Thread-3 (]: SQL status: BEGIN in 0.034 seconds
+[0m23:26:41.182589 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.185583 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+
+  create view "joblens"."public"."bronze_resumes__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    raw_text,
+    parsed_skills,
+    embedding,
+    created_at
+FROM resumes
+  );
+[0m23:26:41.209903 [debug] [Thread-1 (]: SQL status: BEGIN in 0.059 seconds
+[0m23:26:41.212931 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.216251 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+
+  create view "joblens"."public"."bronze_jobs__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    title,
+    company,
+    location,
+    salary_range,
+    job_description,
+    required_skills,
+    embedding,
+    source,
+    posted_at,
+    created_at
+FROM jobs
+  );
+[0m23:26:41.222232 [debug] [Thread-2 (]: SQL status: BEGIN in 0.085 seconds
+[0m23:26:41.225419 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.228481 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+
+  create view "joblens"."public"."bronze_matches__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    resume_id,
+    job_id,
+    overall_score,
+    semantic_score,
+    keyword_score,
+    classifier_score,
+    fit_label,
+    confidence,
+    matched_skills,
+    missing_skills,
+    experience_gap,
+    summary,
+    created_at
+FROM matches
+  );
+[0m23:26:41.243466 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.024 seconds
+[0m23:26:41.253115 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.065 seconds
+[0m23:26:41.254021 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.023 seconds
+[0m23:26:41.260574 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.269034 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.277339 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.280002 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+alter table "joblens"."public"."bronze_jobs" rename to "bronze_jobs__dbt_backup"
+[0m23:26:41.283200 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+alter table "joblens"."public"."bronze_resumes" rename to "bronze_resumes__dbt_backup"
+[0m23:26:41.286835 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+alter table "joblens"."public"."bronze_matches" rename to "bronze_matches__dbt_backup"
+[0m23:26:41.295304 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.005 seconds
+[0m23:26:41.296195 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.004 seconds
+[0m23:26:41.296974 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m23:26:41.303794 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.310458 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.318404 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.320409 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+alter table "joblens"."public"."bronze_jobs__dbt_tmp" rename to "bronze_jobs"
+[0m23:26:41.322761 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+alter table "joblens"."public"."bronze_resumes__dbt_tmp" rename to "bronze_resumes"
+[0m23:26:41.325545 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+alter table "joblens"."public"."bronze_matches__dbt_tmp" rename to "bronze_matches"
+[0m23:26:41.329426 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:41.331680 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m23:26:41.333301 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:41.372507 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: COMMIT
+[0m23:26:41.376049 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: COMMIT
+[0m23:26:41.380227 [debug] [Thread-2 (]: On model.joblens.bronze_matches: COMMIT
+[0m23:26:41.382196 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.384523 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.387296 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.389618 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: COMMIT
+[0m23:26:41.392028 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: COMMIT
+[0m23:26:41.394250 [debug] [Thread-2 (]: On model.joblens.bronze_matches: COMMIT
+[0m23:26:41.401339 [debug] [Thread-1 (]: SQL status: COMMIT in 0.005 seconds
+[0m23:26:41.402779 [debug] [Thread-3 (]: SQL status: COMMIT in 0.004 seconds
+[0m23:26:41.404056 [debug] [Thread-2 (]: SQL status: COMMIT in 0.003 seconds
+[0m23:26:41.414841 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."bronze_jobs__dbt_backup"
+[0m23:26:41.419708 [debug] [Thread-3 (]: Applying DROP to: "joblens"."public"."bronze_resumes__dbt_backup"
+[0m23:26:41.424590 [debug] [Thread-2 (]: Applying DROP to: "joblens"."public"."bronze_matches__dbt_backup"
+[0m23:26:41.433102 [debug] [Thread-1 (]: Using postgres connection "model.joblens.bronze_jobs"
+[0m23:26:41.435403 [debug] [Thread-3 (]: Using postgres connection "model.joblens.bronze_resumes"
+[0m23:26:41.438681 [debug] [Thread-2 (]: Using postgres connection "model.joblens.bronze_matches"
+[0m23:26:41.441348 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_jobs"} */
+drop view if exists "joblens"."public"."bronze_jobs__dbt_backup" cascade
+[0m23:26:41.443796 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_resumes"} */
+drop view if exists "joblens"."public"."bronze_resumes__dbt_backup" cascade
+[0m23:26:41.446092 [debug] [Thread-2 (]: On model.joblens.bronze_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.bronze_matches"} */
+drop view if exists "joblens"."public"."bronze_matches__dbt_backup" cascade
+[0m23:26:41.470259 [debug] [Thread-3 (]: SQL status: DROP VIEW in 0.020 seconds
+[0m23:26:41.475108 [debug] [Thread-3 (]: On model.joblens.bronze_resumes: Close
+[0m23:26:41.477322 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.029 seconds
+[0m23:26:41.481543 [debug] [Thread-3 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc974eefdd0>]}
+[0m23:26:41.483620 [debug] [Thread-1 (]: On model.joblens.bronze_jobs: Close
+[0m23:26:41.485570 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.033 seconds
+[0m23:26:41.486524 [info ] [Thread-3 (]: 3 of 10 OK created sql view model public.bronze_resumes ........................ [[32mCREATE VIEW[0m in 0.60s]
+[0m23:26:41.489619 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc970630890>]}
+[0m23:26:41.492813 [debug] [Thread-2 (]: On model.joblens.bronze_matches: Close
+[0m23:26:41.495755 [debug] [Thread-3 (]: Finished running node model.joblens.bronze_resumes
+[0m23:26:41.499175 [info ] [Thread-1 (]: 1 of 10 OK created sql view model public.bronze_jobs ........................... [[32mCREATE VIEW[0m in 0.61s]
+[0m23:26:41.502597 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc970630890>]}
+[0m23:26:41.507155 [debug] [Thread-1 (]: Finished running node model.joblens.bronze_jobs
+[0m23:26:41.510273 [info ] [Thread-2 (]: 2 of 10 OK created sql view model public.bronze_matches ........................ [[32mCREATE VIEW[0m in 0.62s]
+[0m23:26:41.514285 [debug] [Thread-4 (]: Began running node model.joblens.gold_market_skills
+[0m23:26:41.515026 [debug] [Thread-3 (]: Began running node model.joblens.silver_jobs
+[0m23:26:41.517385 [debug] [Thread-2 (]: Finished running node model.joblens.bronze_matches
+[0m23:26:41.519930 [info ] [Thread-4 (]: 4 of 10 START sql view model public.gold_market_skills ......................... [RUN]
+[0m23:26:41.522047 [info ] [Thread-3 (]: 5 of 10 START sql view model public.silver_jobs ................................ [RUN]
+[0m23:26:41.525221 [debug] [Thread-1 (]: Began running node model.joblens.silver_matches
+[0m23:26:41.527569 [debug] [Thread-4 (]: Acquiring new postgres connection 'model.joblens.gold_market_skills'
+[0m23:26:41.529685 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_resumes, now model.joblens.silver_jobs)
+[0m23:26:41.533031 [info ] [Thread-1 (]: 6 of 10 START sql view model public.silver_matches ............................. [RUN]
+[0m23:26:41.535106 [debug] [Thread-4 (]: Began compiling node model.joblens.gold_market_skills
+[0m23:26:41.537396 [debug] [Thread-3 (]: Began compiling node model.joblens.silver_jobs
+[0m23:26:41.539737 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_jobs, now model.joblens.silver_matches)
+[0m23:26:41.544931 [debug] [Thread-4 (]: Writing injected SQL for node "model.joblens.gold_market_skills"
+[0m23:26:41.550677 [debug] [Thread-3 (]: Writing injected SQL for node "model.joblens.silver_jobs"
+[0m23:26:41.553365 [debug] [Thread-1 (]: Began compiling node model.joblens.silver_matches
+[0m23:26:41.563463 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.silver_matches"
+[0m23:26:41.573694 [debug] [Thread-3 (]: Began executing node model.joblens.silver_jobs
+[0m23:26:41.574425 [debug] [Thread-4 (]: Began executing node model.joblens.gold_market_skills
+[0m23:26:41.579902 [debug] [Thread-3 (]: Writing runtime sql for node "model.joblens.silver_jobs"
+[0m23:26:41.580789 [debug] [Thread-1 (]: Began executing node model.joblens.silver_matches
+[0m23:26:41.585908 [debug] [Thread-4 (]: Writing runtime sql for node "model.joblens.gold_market_skills"
+[0m23:26:41.599937 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.silver_matches"
+[0m23:26:41.613747 [debug] [Thread-3 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:26:41.615897 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:26:41.617195 [debug] [Thread-3 (]: On model.joblens.silver_jobs: BEGIN
+[0m23:26:41.617776 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:26:41.619318 [debug] [Thread-1 (]: On model.joblens.silver_matches: BEGIN
+[0m23:26:41.621675 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
+[0m23:26:41.624077 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: BEGIN
+[0m23:26:41.626888 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:26:41.630688 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m23:26:41.651155 [debug] [Thread-3 (]: SQL status: BEGIN in 0.029 seconds
+[0m23:26:41.654330 [debug] [Thread-3 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:26:41.655022 [debug] [Thread-1 (]: SQL status: BEGIN in 0.028 seconds
+[0m23:26:41.657812 [debug] [Thread-3 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+
+  create view "joblens"."public"."silver_jobs__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    title,
+    company,
+    CASE
+        WHEN location ILIKE '%remote%'                          THEN 'Remote'
+        WHEN location ILIKE '%new york%' OR location ILIKE '%nyc%' THEN 'New York, NY'
+        WHEN location ILIKE '%san francisco%' OR location ILIKE '% sf%' THEN 'San Francisco, CA'
+        WHEN location ILIKE '%austin%'                         THEN 'Austin, TX'
+        WHEN location ILIKE '%seattle%'                        THEN 'Seattle, WA'
+        ELSE location
+    END AS location,
+    -- Normalize salary to a rough midpoint (numeric) for aggregations
+    salary_range,
+    job_description,
+    required_skills,
+    source,
+    posted_at,
+    created_at
+FROM "joblens"."public"."bronze_jobs"
+  );
+[0m23:26:41.659945 [debug] [Thread-4 (]: SQL status: BEGIN in 0.029 seconds
+[0m23:26:41.661496 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:26:41.666231 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:26:41.668450 [debug] [Thread-1 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+
+  create view "joblens"."public"."silver_matches__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    id,
+    resume_id,
+    job_id,
+    overall_score,
+    semantic_score,
+    keyword_score,
+    classifier_score,
+    fit_label,
+    confidence,
+    matched_skills,
+    missing_skills,
+    experience_gap,
+    summary,
+    created_at
+FROM "joblens"."public"."bronze_matches"
+WHERE overall_score IS NOT NULL
+  AND overall_score BETWEEN 0 AND 100
+  );
+[0m23:26:41.671553 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+
+  create view "joblens"."public"."gold_market_skills__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    skill_name,
+    COUNT(*) AS demand_count
+FROM "joblens"."public"."bronze_jobs",
+     jsonb_array_elements_text(required_skills::jsonb) AS skill_name
+GROUP BY skill_name
+ORDER BY demand_count DESC
+  );
+[0m23:26:41.674532 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.010 seconds
+[0m23:26:41.688370 [debug] [Thread-3 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:26:41.689062 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.015 seconds
+[0m23:26:41.691509 [debug] [Thread-3 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+alter table "joblens"."public"."silver_jobs__dbt_tmp" rename to "silver_jobs"
+[0m23:26:41.692285 [debug] [Thread-4 (]: SQL status: CREATE VIEW in 0.016 seconds
+[0m23:26:41.700470 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:26:41.704216 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:41.708946 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:26:41.712149 [debug] [Thread-1 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+alter table "joblens"."public"."silver_matches__dbt_tmp" rename to "silver_matches"
+[0m23:26:41.717299 [debug] [Thread-3 (]: On model.joblens.silver_jobs: COMMIT
+[0m23:26:41.720455 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+alter table "joblens"."public"."gold_market_skills__dbt_tmp" rename to "gold_market_skills"
+[0m23:26:41.723472 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:41.724544 [debug] [Thread-3 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:26:41.728103 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:41.730651 [debug] [Thread-1 (]: On model.joblens.silver_matches: COMMIT
+[0m23:26:41.733044 [debug] [Thread-3 (]: On model.joblens.silver_jobs: COMMIT
+[0m23:26:41.737523 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: COMMIT
+[0m23:26:41.739842 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:26:41.744953 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:26:41.745811 [debug] [Thread-3 (]: SQL status: COMMIT in 0.004 seconds
+[0m23:26:41.747490 [debug] [Thread-1 (]: On model.joblens.silver_matches: COMMIT
+[0m23:26:41.749721 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: COMMIT
+[0m23:26:41.756593 [debug] [Thread-3 (]: Applying DROP to: "joblens"."public"."silver_jobs__dbt_backup"
+[0m23:26:41.761622 [debug] [Thread-1 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:26:41.763750 [debug] [Thread-4 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:26:41.765048 [debug] [Thread-3 (]: Using postgres connection "model.joblens.silver_jobs"
+[0m23:26:41.770831 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."silver_matches__dbt_backup"
+[0m23:26:41.776391 [debug] [Thread-4 (]: Applying DROP to: "joblens"."public"."gold_market_skills__dbt_backup"
+[0m23:26:41.778731 [debug] [Thread-3 (]: On model.joblens.silver_jobs: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_jobs"} */
+drop view if exists "joblens"."public"."silver_jobs__dbt_backup" cascade
+[0m23:26:41.781859 [debug] [Thread-1 (]: Using postgres connection "model.joblens.silver_matches"
+[0m23:26:41.784962 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_market_skills"
+[0m23:26:41.789533 [debug] [Thread-3 (]: SQL status: DROP VIEW in 0.002 seconds
+[0m23:26:41.790125 [debug] [Thread-1 (]: On model.joblens.silver_matches: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.silver_matches"} */
+drop view if exists "joblens"."public"."silver_matches__dbt_backup" cascade
+[0m23:26:41.792494 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_market_skills"} */
+drop view if exists "joblens"."public"."gold_market_skills__dbt_backup" cascade
+[0m23:26:41.796111 [debug] [Thread-3 (]: On model.joblens.silver_jobs: Close
+[0m23:26:41.799710 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:41.801862 [debug] [Thread-4 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:41.803760 [debug] [Thread-3 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc972799650>]}
+[0m23:26:41.807231 [debug] [Thread-1 (]: On model.joblens.silver_matches: Close
+[0m23:26:41.810582 [debug] [Thread-4 (]: On model.joblens.gold_market_skills: Close
+[0m23:26:41.813291 [info ] [Thread-3 (]: 5 of 10 OK created sql view model public.silver_jobs ........................... [[32mCREATE VIEW[0m in 0.27s]
+[0m23:26:41.816350 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc97271aed0>]}
+[0m23:26:41.819069 [debug] [Thread-4 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc97068aa90>]}
+[0m23:26:41.821371 [debug] [Thread-3 (]: Finished running node model.joblens.silver_jobs
+[0m23:26:41.824198 [info ] [Thread-1 (]: 6 of 10 OK created sql view model public.silver_matches ........................ [[32mCREATE VIEW[0m in 0.28s]
+[0m23:26:41.827330 [info ] [Thread-4 (]: 4 of 10 OK created sql view model public.gold_market_skills .................... [[32mCREATE VIEW[0m in 0.29s]
+[0m23:26:41.831934 [debug] [Thread-1 (]: Finished running node model.joblens.silver_matches
+[0m23:26:41.834242 [debug] [Thread-4 (]: Finished running node model.joblens.gold_market_skills
+[0m23:26:41.838036 [debug] [Thread-2 (]: Began running node model.joblens.gold_company_insights
+[0m23:26:41.838583 [debug] [Thread-3 (]: Began running node model.joblens.gold_resume_gaps
+[0m23:26:41.839195 [debug] [Thread-1 (]: Began running node model.joblens.gold_score_distribution
+[0m23:26:41.839739 [debug] [Thread-4 (]: Began running node model.joblens.gold_top_roles
+[0m23:26:41.842057 [info ] [Thread-2 (]: 7 of 10 START sql view model public.gold_company_insights ...................... [RUN]
+[0m23:26:41.845066 [info ] [Thread-3 (]: 8 of 10 START sql view model public.gold_resume_gaps ........................... [RUN]
+[0m23:26:41.847478 [info ] [Thread-1 (]: 9 of 10 START sql view model public.gold_score_distribution .................... [RUN]
+[0m23:26:41.850320 [info ] [Thread-4 (]: 10 of 10 START sql view model public.gold_top_roles ............................ [RUN]
+[0m23:26:41.853406 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.joblens.bronze_matches, now model.joblens.gold_company_insights)
+[0m23:26:41.856577 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.joblens.silver_jobs, now model.joblens.gold_resume_gaps)
+[0m23:26:41.858983 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly model.joblens.silver_matches, now model.joblens.gold_score_distribution)
+[0m23:26:41.861864 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly model.joblens.gold_market_skills, now model.joblens.gold_top_roles)
+[0m23:26:41.865063 [debug] [Thread-2 (]: Began compiling node model.joblens.gold_company_insights
+[0m23:26:41.868035 [debug] [Thread-3 (]: Began compiling node model.joblens.gold_resume_gaps
+[0m23:26:41.871054 [debug] [Thread-1 (]: Began compiling node model.joblens.gold_score_distribution
+[0m23:26:41.873409 [debug] [Thread-4 (]: Began compiling node model.joblens.gold_top_roles
+[0m23:26:41.882120 [debug] [Thread-2 (]: Writing injected SQL for node "model.joblens.gold_company_insights"
+[0m23:26:41.891917 [debug] [Thread-3 (]: Writing injected SQL for node "model.joblens.gold_resume_gaps"
+[0m23:26:41.898533 [debug] [Thread-1 (]: Writing injected SQL for node "model.joblens.gold_score_distribution"
+[0m23:26:41.905486 [debug] [Thread-4 (]: Writing injected SQL for node "model.joblens.gold_top_roles"
+[0m23:26:41.919307 [debug] [Thread-3 (]: Began executing node model.joblens.gold_resume_gaps
+[0m23:26:41.921593 [debug] [Thread-2 (]: Began executing node model.joblens.gold_company_insights
+[0m23:26:41.933503 [debug] [Thread-3 (]: Writing runtime sql for node "model.joblens.gold_resume_gaps"
+[0m23:26:41.934299 [debug] [Thread-1 (]: Began executing node model.joblens.gold_score_distribution
+[0m23:26:41.935714 [debug] [Thread-4 (]: Began executing node model.joblens.gold_top_roles
+[0m23:26:41.943272 [debug] [Thread-2 (]: Writing runtime sql for node "model.joblens.gold_company_insights"
+[0m23:26:41.950961 [debug] [Thread-1 (]: Writing runtime sql for node "model.joblens.gold_score_distribution"
+[0m23:26:41.957792 [debug] [Thread-4 (]: Writing runtime sql for node "model.joblens.gold_top_roles"
+[0m23:26:41.961694 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:26:41.968141 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:26:41.969164 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: BEGIN
+[0m23:26:41.972138 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: BEGIN
+[0m23:26:41.973318 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:26:41.974893 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:26:41.976627 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
+[0m23:26:41.979309 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
+[0m23:26:41.981761 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: BEGIN
+[0m23:26:41.984511 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: BEGIN
+[0m23:26:41.993474 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
+[0m23:26:41.997254 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
+[0m23:26:42.010576 [debug] [Thread-3 (]: SQL status: BEGIN in 0.034 seconds
+[0m23:26:42.012875 [debug] [Thread-1 (]: SQL status: BEGIN in 0.019 seconds
+[0m23:26:42.015054 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:26:42.018923 [debug] [Thread-4 (]: SQL status: BEGIN in 0.022 seconds
+[0m23:26:42.019925 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:26:42.023748 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+
+  create view "joblens"."public"."gold_resume_gaps__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    resume_id,
+    skill_name,
+    COUNT(*) AS missing_count
+FROM "joblens"."public"."silver_matches",
+     jsonb_array_elements_text(missing_skills::jsonb) AS skill_name
+GROUP BY resume_id, skill_name
+  );
+[0m23:26:42.027040 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:26:42.030010 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+
+  create view "joblens"."public"."gold_score_distribution__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    CASE
+        WHEN overall_score <= 30 THEN '0-30'
+        WHEN overall_score <= 50 THEN '31-50'
+        WHEN overall_score <= 70 THEN '51-70'
+        WHEN overall_score <= 85 THEN '71-85'
+        ELSE '86-100'
+    END AS score_bucket,
+    COUNT(*) AS job_count
+FROM "joblens"."public"."silver_matches"
+GROUP BY score_bucket
+  );
+[0m23:26:42.031292 [debug] [Thread-2 (]: SQL status: BEGIN in 0.052 seconds
+[0m23:26:42.036235 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+
+  create view "joblens"."public"."gold_top_roles__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    m.resume_id,
+    TRIM(REGEXP_REPLACE(j.title, '\s*[–\-].*$', '')) AS role_type,
+    ROUND(AVG(m.overall_score)::numeric, 1)           AS avg_score,
+    COUNT(*)                                           AS job_count
+FROM "joblens"."public"."silver_matches" m
+JOIN "joblens"."public"."silver_jobs" j ON m.job_id = j.id
+GROUP BY m.resume_id, role_type
+  );
+[0m23:26:42.042452 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:26:42.043328 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.010 seconds
+[0m23:26:42.045896 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.006 seconds
+[0m23:26:42.048220 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+
+  create view "joblens"."public"."gold_company_insights__dbt_tmp"
+    
+    
+  as (
+    
+
+SELECT
+    j.company,
+    ROUND(AVG(m.overall_score)::numeric,  1) AS avg_score,
+    ROUND(AVG(m.keyword_score)::numeric,  1) AS avg_skill_overlap,
+    COUNT(*)                                  AS match_count
+FROM "joblens"."public"."silver_matches" m
+JOIN "joblens"."public"."silver_jobs" j ON m.job_id = j.id
+GROUP BY j.company
+ORDER BY avg_score DESC
+  );
+[0m23:26:42.056343 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:26:42.063649 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:26:42.069742 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+alter table "joblens"."public"."gold_resume_gaps__dbt_tmp" rename to "gold_resume_gaps"
+[0m23:26:42.073068 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+alter table "joblens"."public"."gold_score_distribution__dbt_tmp" rename to "gold_score_distribution"
+[0m23:26:42.077566 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:42.080265 [debug] [Thread-4 (]: SQL status: CREATE VIEW in 0.035 seconds
+[0m23:26:42.080973 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:42.084396 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: COMMIT
+[0m23:26:42.092658 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:26:42.096607 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: COMMIT
+[0m23:26:42.099977 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:26:42.103794 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+alter table "joblens"."public"."gold_top_roles__dbt_tmp" rename to "gold_top_roles"
+[0m23:26:42.105877 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.039 seconds
+[0m23:26:42.107108 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:26:42.110238 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: COMMIT
+[0m23:26:42.114734 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.002 seconds
+[0m23:26:42.123138 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:26:42.126294 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: COMMIT
+[0m23:26:42.132984 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: COMMIT
+[0m23:26:42.133888 [debug] [Thread-3 (]: SQL status: COMMIT in 0.005 seconds
+[0m23:26:42.135929 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+alter table "joblens"."public"."gold_company_insights__dbt_tmp" rename to "gold_company_insights"
+[0m23:26:42.141038 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:26:42.142133 [debug] [Thread-1 (]: SQL status: COMMIT in 0.003 seconds
+[0m23:26:42.148625 [debug] [Thread-3 (]: Applying DROP to: "joblens"."public"."gold_resume_gaps__dbt_backup"
+[0m23:26:42.152699 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
+[0m23:26:42.154292 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: COMMIT
+[0m23:26:42.161968 [debug] [Thread-1 (]: Applying DROP to: "joblens"."public"."gold_score_distribution__dbt_backup"
+[0m23:26:42.165650 [debug] [Thread-3 (]: Using postgres connection "model.joblens.gold_resume_gaps"
+[0m23:26:42.170626 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: COMMIT
+[0m23:26:42.175582 [debug] [Thread-4 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:26:42.176666 [debug] [Thread-1 (]: Using postgres connection "model.joblens.gold_score_distribution"
+[0m23:26:42.178893 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_resume_gaps"} */
+drop view if exists "joblens"."public"."gold_resume_gaps__dbt_backup" cascade
+[0m23:26:42.181720 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:26:42.188569 [debug] [Thread-4 (]: Applying DROP to: "joblens"."public"."gold_top_roles__dbt_backup"
+[0m23:26:42.191682 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_score_distribution"} */
+drop view if exists "joblens"."public"."gold_score_distribution__dbt_backup" cascade
+[0m23:26:42.195071 [debug] [Thread-3 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:42.196588 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: COMMIT
+[0m23:26:42.199562 [debug] [Thread-4 (]: Using postgres connection "model.joblens.gold_top_roles"
+[0m23:26:42.202893 [debug] [Thread-1 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:42.205687 [debug] [Thread-3 (]: On model.joblens.gold_resume_gaps: Close
+[0m23:26:42.210385 [debug] [Thread-2 (]: SQL status: COMMIT in 0.002 seconds
+[0m23:26:42.210933 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_top_roles"} */
+drop view if exists "joblens"."public"."gold_top_roles__dbt_backup" cascade
+[0m23:26:42.215513 [debug] [Thread-1 (]: On model.joblens.gold_score_distribution: Close
+[0m23:26:42.218554 [debug] [Thread-3 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc97068b910>]}
+[0m23:26:42.229041 [debug] [Thread-2 (]: Applying DROP to: "joblens"."public"."gold_company_insights__dbt_backup"
+[0m23:26:42.231503 [debug] [Thread-4 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:42.234530 [debug] [Thread-1 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9706d7090>]}
+[0m23:26:42.237758 [info ] [Thread-3 (]: 8 of 10 OK created sql view model public.gold_resume_gaps ...................... [[32mCREATE VIEW[0m in 0.36s]
+[0m23:26:42.240912 [debug] [Thread-2 (]: Using postgres connection "model.joblens.gold_company_insights"
+[0m23:26:42.245678 [debug] [Thread-4 (]: On model.joblens.gold_top_roles: Close
+[0m23:26:42.248163 [info ] [Thread-1 (]: 9 of 10 OK created sql view model public.gold_score_distribution ............... [[32mCREATE VIEW[0m in 0.38s]
+[0m23:26:42.250702 [debug] [Thread-3 (]: Finished running node model.joblens.gold_resume_gaps
+[0m23:26:42.252915 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: /* {"app": "dbt", "dbt_version": "1.11.7", "profile_name": "joblens", "target_name": "dev", "node_id": "model.joblens.gold_company_insights"} */
+drop view if exists "joblens"."public"."gold_company_insights__dbt_backup" cascade
+[0m23:26:42.256397 [debug] [Thread-4 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9706d4b90>]}
+[0m23:26:42.258463 [debug] [Thread-1 (]: Finished running node model.joblens.gold_score_distribution
+[0m23:26:42.263988 [debug] [Thread-2 (]: SQL status: DROP VIEW in 0.001 seconds
+[0m23:26:42.266409 [info ] [Thread-4 (]: 10 of 10 OK created sql view model public.gold_top_roles ....................... [[32mCREATE VIEW[0m in 0.39s]
+[0m23:26:42.272292 [debug] [Thread-2 (]: On model.joblens.gold_company_insights: Close
+[0m23:26:42.275698 [debug] [Thread-4 (]: Finished running node model.joblens.gold_top_roles
+[0m23:26:42.278844 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': 'da924dcd-915f-4bb9-8978-6fc9ca32059e', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9706d6410>]}
+[0m23:26:42.283659 [info ] [Thread-2 (]: 7 of 10 OK created sql view model public.gold_company_insights ................. [[32mCREATE VIEW[0m in 0.43s]
+[0m23:26:42.286562 [debug] [Thread-2 (]: Finished running node model.joblens.gold_company_insights
+[0m23:26:42.292788 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:42.295010 [debug] [MainThread]: On master: BEGIN
+[0m23:26:42.297275 [debug] [MainThread]: Opening a new connection, currently in state closed
+[0m23:26:42.308954 [debug] [MainThread]: SQL status: BEGIN in 0.012 seconds
+[0m23:26:42.311859 [debug] [MainThread]: On master: COMMIT
+[0m23:26:42.314236 [debug] [MainThread]: Using postgres connection "master"
+[0m23:26:42.316556 [debug] [MainThread]: On master: COMMIT
+[0m23:26:42.319134 [debug] [MainThread]: SQL status: COMMIT in 0.001 seconds
+[0m23:26:42.321533 [debug] [MainThread]: On master: Close
+[0m23:26:42.323792 [debug] [MainThread]: Connection 'master' was properly closed.
+[0m23:26:42.326098 [debug] [MainThread]: Connection 'model.joblens.gold_score_distribution' was properly closed.
+[0m23:26:42.328610 [debug] [MainThread]: Connection 'model.joblens.gold_company_insights' was properly closed.
+[0m23:26:42.331303 [debug] [MainThread]: Connection 'model.joblens.gold_resume_gaps' was properly closed.
+[0m23:26:42.333443 [debug] [MainThread]: Connection 'model.joblens.gold_top_roles' was properly closed.
+[0m23:26:42.336250 [info ] [MainThread]: 
+[0m23:26:42.338823 [info ] [MainThread]: Finished running 10 view models in 0 hours 0 minutes and 2.40 seconds (2.40s).
+[0m23:26:42.343321 [debug] [MainThread]: Command end result
+[0m23:26:42.417009 [debug] [MainThread]: Wrote artifact WritableManifest to /app/dbt/target/manifest.json
+[0m23:26:42.427233 [debug] [MainThread]: Wrote artifact SemanticManifest to /app/dbt/target/semantic_manifest.json
+[0m23:26:42.444673 [debug] [MainThread]: Wrote artifact RunExecutionResult to /app/dbt/target/run_results.json
+[0m23:26:42.446949 [info ] [MainThread]: 
+[0m23:26:42.449634 [info ] [MainThread]: [32mCompleted successfully[0m
+[0m23:26:42.451913 [info ] [MainThread]: 
+[0m23:26:42.454243 [info ] [MainThread]: Done. PASS=10 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=10
+[0m23:26:42.461506 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 5.018319, "process_in_blocks": "86536", "process_kernel_time": 4.337045, "process_mem_max_rss": "129020", "process_out_blocks": "744", "process_user_time": 4.86691}
+[0m23:26:42.463877 [debug] [MainThread]: Command `dbt run` succeeded at 23:26:42.463662 after 5.02 seconds
+[0m23:26:42.466829 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc9759d3f10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc979fea850>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fc979fea890>]}
+[0m23:26:42.469731 [debug] [MainThread]: Flushing usage events
+[0m23:26:42.814787 [debug] [MainThread]: An error was encountered while trying to flush usage events
