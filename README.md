@@ -341,3 +341,56 @@ GitHub Actions runs four jobs on every push and pull request to `main`:
 | `typecheck` | mypy | Type correctness (`--ignore-missing-imports --no-strict-optional`) |
 | `test` | pytest + pytest-asyncio | API endpoint tests with mocked DB and scorer |
 | `frontend-build` | Vite | `npm run build` succeeds |
+
+---
+
+## Railway Deployment
+
+Railway deploys each process as an independent service. The recommended setup uses four services: **API**, **Frontend**, **PostgreSQL**, and **Redis**.
+
+### 1. Add backing services
+
+In your Railway project dashboard, click **New** and add:
+- **PostgreSQL** — Railway provisions `DATABASE_URL` automatically.
+- **Redis** — Railway provisions `REDIS_URL` automatically.
+
+### 2. Deploy the API service
+
+1. Click **New → GitHub Repo**, select this repository.
+2. Railway detects `railway.json` at the root and uses `Dockerfile` (the backend build).
+3. Set environment variables on the API service:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | Change scheme to `postgresql+asyncpg://…` (Railway provides `postgresql://…` by default) |
+| `REDIS_URL` | Provided automatically by the Redis service |
+| `SECRET_KEY` | A random secret string |
+| `ENVIRONMENT` | `production` |
+
+> **Note:** Railway's PostgreSQL plugin sets `DATABASE_URL` with the `postgresql://` scheme. FastAPI uses asyncpg, so you must override it to `postgresql+asyncpg://` in the API service's variable panel.
+
+### 3. Deploy the frontend service
+
+1. In the same project, click **New → GitHub Repo** again (same repo).
+2. In the service settings, set **Dockerfile path** to `frontend/Dockerfile`.
+3. Set environment variables on the frontend service:
+
+| Variable | Value |
+|---|---|
+| `VITE_API_URL` | The public URL of your Railway API service, e.g. `https://api-xyz.up.railway.app` |
+
+### 4. Link services via Railway networking
+
+Railway services within the same project can communicate over a private network using internal hostnames. For the Celery worker (if deployed as a separate service) point `REDIS_URL` and `DATABASE_URL` to the same values as the API service.
+
+### 5. Environment variable reference
+
+See `.env.example` at the repository root for a full list of required variables with descriptions.
+
+### Service URLs after deployment
+
+| Service | URL |
+|---|---|
+| API | `https://<api-service>.up.railway.app` |
+| API docs | `https://<api-service>.up.railway.app/docs` |
+| Frontend | `https://<frontend-service>.up.railway.app` |

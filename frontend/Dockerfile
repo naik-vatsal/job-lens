@@ -2,11 +2,13 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY frontend/package*.json ./
 RUN npm install
 
-COPY . .
+COPY frontend/ .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+EXPOSE 3000
+
+CMD ["npx", "serve", "-s", "dist", "-l", "3000"]
