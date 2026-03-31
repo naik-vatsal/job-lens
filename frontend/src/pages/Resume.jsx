@@ -1,19 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { uploadResume, matchAllJobs, getTaskStatus, saveResumeId, loadResumeId } from '../api.js'
+import { uploadResume, matchAllJobs, getTaskStatus, saveResumeId, loadResumeId, clearResumeId } from '../api.js'
 import SkillChip from '../components/SkillChip.jsx'
 
 const POLL_INTERVAL = 2000
 
 export default function Resume() {
-  const navigate  = useNavigate()
-  const [text,    setText]    = useState('')
-  const [skills,  setSkills]  = useState([])
+  const navigate   = useNavigate()
+  const [text,     setText]     = useState('')
+  const [skills,   setSkills]   = useState([])
   const [resumeId, setResumeId] = useState(loadResumeId())
-  const [loading, setLoading] = useState(false)
+  const [showForm, setShowForm] = useState(!loadResumeId())
+  const [loading,  setLoading]  = useState(false)
   const [matching, setMatching] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [error,   setError]   = useState('')
+  const [error,    setError]    = useState('')
   const pollRef = useRef(null)
 
   useEffect(() => () => clearInterval(pollRef.current), [])
@@ -24,9 +25,10 @@ export default function Resume() {
     setLoading(true)
     try {
       const { data } = await uploadResume(text)
+      saveResumeId(data.resume_id)
       setResumeId(data.resume_id)
       setSkills(data.parsed_skills)
-      saveResumeId(data.resume_id)
+      setShowForm(false)
     } catch {
       setError('Failed to analyze resume. Make sure the API is running.')
     } finally {
@@ -61,6 +63,18 @@ export default function Resume() {
     }
   }
 
+  function handleReanalyze() {
+    clearInterval(pollRef.current)
+    clearResumeId()
+    setResumeId(null)
+    setSkills([])
+    setText('')
+    setProgress(0)
+    setMatching(false)
+    setError('')
+    setShowForm(true)
+  }
+
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
       <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>
@@ -70,28 +84,130 @@ export default function Resume() {
         Paste your resume below to extract skills and find matching jobs using semantic AI.
       </p>
 
-      <textarea
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder="Paste your resume text here…"
-        rows={14}
-        style={{
-          width: '100%',
-          background: '#1e293b',
-          border: '1px solid #334155',
+      {/* ── Already-analyzed banner ── */}
+      {resumeId && !showForm && (
+        <div style={{
+          background: '#14532d33',
+          border: '1px solid #22c55e44',
           borderRadius: '10px',
-          color: '#f1f5f9',
-          padding: '16px',
-          fontSize: '0.9rem',
-          resize: 'vertical',
-          outline: 'none',
-          transition: 'border-color 0.15s',
-          lineHeight: 1.7,
-        }}
-        onFocus={e  => (e.target.style.borderColor = '#6366f1')}
-        onBlur={e   => (e.target.style.borderColor = '#334155')}
-        disabled={loading || matching}
-      />
+          padding: '20px 24px',
+          marginBottom: '1.5rem',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '1.2rem' }}>✓</span>
+            <span style={{ fontWeight: 600, color: '#22c55e' }}>Resume already analyzed</span>
+            <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>(Resume #{resumeId})</span>
+          </div>
+
+          {skills.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+              {skills.map(s => <SkillChip key={s} skill={s} variant="accent" />)}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            {!matching && (
+              <button
+                onClick={handleMatchAll}
+                style={{
+                  background: '#6366f1',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '10px 24px',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                }}
+              >
+                Find Matching Jobs
+              </button>
+            )}
+            <button
+              onClick={handleReanalyze}
+              disabled={matching}
+              style={{
+                background: '#273549',
+                color: '#94a3b8',
+                border: '1px solid #334155',
+                borderRadius: '8px',
+                padding: '10px 24px',
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                opacity: matching ? 0.5 : 1,
+              }}
+            >
+              Re-analyze
+            </button>
+          </div>
+
+          {/* Progress bar (matching from already-analyzed state) */}
+          {matching && (
+            <div style={{ marginTop: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#94a3b8' }}>
+                <span>Scoring jobs with AI…</span>
+                <span>{progress}%</span>
+              </div>
+              <div style={{ background: '#273549', borderRadius: '8px', height: '8px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  width: `${progress}%`,
+                  background: 'linear-gradient(90deg, #6366f1, #22c55e)',
+                  borderRadius: '8px',
+                  transition: 'width 0.3s ease',
+                }} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Submission form ── */}
+      {showForm && (
+        <>
+          <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
+            placeholder="Paste your resume text here…"
+            rows={14}
+            style={{
+              width: '100%',
+              background: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '10px',
+              color: '#f1f5f9',
+              padding: '16px',
+              fontSize: '0.9rem',
+              resize: 'vertical',
+              outline: 'none',
+              transition: 'border-color 0.15s',
+              lineHeight: 1.7,
+            }}
+            onFocus={e => (e.target.style.borderColor = '#6366f1')}
+            onBlur={e  => (e.target.style.borderColor = '#334155')}
+            disabled={loading}
+          />
+
+          <div style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+            <button
+              onClick={handleAnalyze}
+              disabled={loading}
+              style={{
+                background: '#6366f1',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 24px',
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                opacity: loading ? 0.7 : 1,
+                transition: 'opacity 0.15s',
+              }}
+            >
+              {loading ? 'Analyzing…' : 'Analyze Resume'}
+            </button>
+          </div>
+        </>
+      )}
 
       {error && (
         <div style={{
@@ -107,67 +223,8 @@ export default function Resume() {
         </div>
       )}
 
-      <div style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
-        <button
-          onClick={handleAnalyze}
-          disabled={loading || matching}
-          style={{
-            background: '#6366f1',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '8px',
-            padding: '10px 24px',
-            fontWeight: 600,
-            fontSize: '0.9rem',
-            opacity: loading ? 0.7 : 1,
-            transition: 'opacity 0.15s',
-          }}
-        >
-          {loading ? 'Analyzing…' : 'Analyze Resume'}
-        </button>
-
-        {resumeId && !matching && (
-          <button
-            onClick={handleMatchAll}
-            style={{
-              background: '#273549',
-              color: '#6366f1',
-              border: '1px solid #6366f144',
-              borderRadius: '8px',
-              padding: '10px 24px',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              transition: 'background 0.15s',
-            }}
-            onMouseEnter={e => (e.target.style.background = '#312e8133')}
-            onMouseLeave={e => (e.target.style.background = '#273549')}
-          >
-            Find Matching Jobs
-          </button>
-        )}
-      </div>
-
-      {/* Progress bar */}
-      {matching && (
-        <div style={{ marginTop: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#94a3b8' }}>
-            <span>Scoring jobs with AI…</span>
-            <span>{progress}%</span>
-          </div>
-          <div style={{ background: '#273549', borderRadius: '8px', height: '8px', overflow: 'hidden' }}>
-            <div style={{
-              height: '100%',
-              width: `${progress}%`,
-              background: 'linear-gradient(90deg, #6366f1, #22c55e)',
-              borderRadius: '8px',
-              transition: 'width 0.3s ease',
-            }} />
-          </div>
-        </div>
-      )}
-
-      {/* Parsed skills */}
-      {skills.length > 0 && (
+      {/* Parsed skills (shown after fresh analysis) */}
+      {showForm && skills.length > 0 && (
         <div style={{ marginTop: '2rem' }}>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '12px' }}>
             Detected Skills

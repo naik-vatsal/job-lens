@@ -35,11 +35,12 @@ export const getResumeAnalytics  = (resumeId) => api.get(`/analytics/resume/${re
 export const seedJobs = () => api.post('/jobs/seed')
 
 // Resume ID persistence
-export const saveResumeId   = (id)  => localStorage.setItem('resumeId', String(id))
+const RESUME_ID_KEY = 'joblens_resume_id'
+export const saveResumeId   = (id)  => localStorage.setItem(RESUME_ID_KEY, String(id))
 export const loadResumeId   = ()    => {
-  const v = localStorage.getItem('resumeId')
+  const v = localStorage.getItem(RESUME_ID_KEY)
   return v ? parseInt(v, 10) : null
 }
-export const clearResumeId  = ()    => localStorage.removeItem('resumeId')
+export const clearResumeId  = ()    => localStorage.removeItem(RESUME_ID_KEY)
 
 export default api

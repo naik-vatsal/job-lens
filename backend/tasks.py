@@ -2,7 +2,8 @@ import asyncio
 import logging
 import os
 import subprocess
-from typing import cast
+
+import numpy as np
 
 from celery_app import celery_app
 from sqlalchemy import select
@@ -22,59 +23,147 @@ def match_resume_all_jobs(self, resume_id: int):
 
 async def _run_matching(task, resume_id: int) -> dict:
     from models import Job, Match, Resume
-    from scorer import score_match
+    from scorer import classify_batch, extract_skills, extract_years_experience
 
     async with _session_maker() as session:
         resume = await session.get(Resume, resume_id)
         if not resume:
             return {"error": "Resume not found"}
 
-        result = await session.execute(select(Job))
-        jobs = result.scalars().all()
+        jobs = (await session.execute(select(Job))).scalars().all()
         total = len(jobs)
 
+        if total == 0:
+            return {"completed": True, "total": 0, "percent": 100}
+
+        # ── 1. Batch cosine similarity (one matrix multiply) ──────────────────
+        # Embeddings are stored normalised, so cosine sim == dot product.
+        resume_emb = np.array(resume.embedding, dtype=np.float32)             # (d,)
+        job_embs   = np.array([j.embedding for j in jobs], dtype=np.float32)  # (n, d)
+        semantic_scores = (job_embs @ resume_emb).clip(0.0, 1.0)              # (n,)
+
+        # ── 2. Keyword scores (pure Python set ops, no model) ─────────────────
+        resume_skills_set = set(str(s) for s in (resume.parsed_skills or []))
+        resume_text = str(resume.raw_text)
+
+        # One query to find already-scored jobs
+        already_scored: set[int] = set(
+            (await session.execute(
+                select(Match.job_id).where(Match.resume_id == resume_id)
+            )).scalars().all()
+        )
+
+        # Indices and precomputed keyword data for jobs that need scoring
+        pending_indices: list[int] = []
+        keyword_data: list[tuple[list[str], list[str], float]] = []  # matched, missing, score
+
         for i, job in enumerate(jobs):
-            try:
-                existing = await session.execute(
-                    select(Match).where(
-                        Match.resume_id == resume_id,
-                        Match.job_id == job.id,
-                    )
-                )
-                if existing.scalar_one_or_none():
-                    _update_progress(task, i + 1, total)
-                    continue
+            if job.id in already_scored:
+                continue
+            jd_skills = extract_skills(str(job.job_description))
+            matched = sorted(resume_skills_set & set(jd_skills))
+            missing = sorted(set(jd_skills) - resume_skills_set)
+            kw_score = len(matched) / len(jd_skills) if jd_skills else 0.0
+            pending_indices.append(i)
+            keyword_data.append((matched, missing, kw_score))
 
-                score_result = await score_match(
-                    str(resume.raw_text),
-                    str(job.job_description),
-                    cast(list[str], resume.parsed_skills),
+        # ── 3. Batch BART classification — one call, batch_size=8 ─────────────
+        # ~7 forward passes instead of 50 sequential calls.
+        batch_texts = [
+            f"Job requirements: {str(jobs[i].job_description)[:400]} "
+            f"Candidate resume: {resume_text[:400]}"
+            for i in pending_indices
+        ]
+        clf_results = classify_batch(batch_texts, batch_size=8)
+
+        # ── 4. Assemble Match rows and bulk-insert ────────────────────────────
+        new_matches: list[Match] = []
+        years_in_resume = extract_years_experience(resume_text)
+
+        for order, i in enumerate(pending_indices):
+            job = jobs[i]
+            matched_skills, missing_skills, keyword_score = keyword_data[order]
+            semantic_score = float(semantic_scores[i])
+            fit_label, confidence = clf_results[order]
+
+            # Fall back to keyword-derived label if BART failed
+            if not fit_label:
+                if keyword_score > 0.6:
+                    fit_label, confidence = "strong fit", 0.72
+                elif keyword_score > 0.3:
+                    fit_label, confidence = "partial fit", 0.65
+                else:
+                    fit_label, confidence = "weak fit", 0.70
+
+            overall_score = round(
+                min(100.0, max(0.0, (
+                    semantic_score * 0.45
+                    + keyword_score * 0.35
+                    + confidence   * 0.20
+                ) * 100)),
+                1,
+            )
+
+            years_required = extract_years_experience(str(job.job_description))
+            experience_gap = round(years_required - years_in_resume, 1)
+
+            if overall_score >= 70:
+                summary = (
+                    f"Strong match with {len(matched_skills)} overlapping skills"
+                    + (f" including {', '.join(matched_skills[:3])}." if matched_skills else ".")
+                    + " Your background aligns well with this role's technical requirements."
+                )
+            elif overall_score >= 40:
+                gap_hint = (
+                    f" Consider building expertise in {', '.join(missing_skills[:2])}."
+                    if missing_skills else ""
+                )
+                summary = (
+                    f"Partial match with {len(matched_skills)} overlapping skills.{gap_hint} "
+                    "Strengthening key missing areas would meaningfully improve your fit."
+                )
+            else:
+                gap_hint = (
+                    f" Key gaps include {', '.join(missing_skills[:3])}."
+                    if missing_skills else ""
+                )
+                summary = (
+                    f"Limited overlap with only {len(matched_skills)} matching skills.{gap_hint} "
+                    "This role requires significant additional experience to be a competitive candidate."
                 )
 
-                match = Match(
-                    resume_id=resume_id,
-                    job_id=job.id,
-                    overall_score=score_result["overall_score"],
-                    semantic_score=score_result["semantic_score"],
-                    keyword_score=score_result["keyword_score"],
-                    classifier_score=score_result["classifier_score"],
-                    fit_label=score_result["fit_label"],
-                    confidence=score_result["confidence"],
-                    matched_skills=score_result["matched_skills"],
-                    missing_skills=score_result["missing_skills"],
-                    experience_gap=score_result["experience_gap"],
-                    summary=score_result["summary"],
-                )
-                session.add(match)
-                await session.commit()
-
-            except Exception as e:
-                logger.error(f"Error scoring job {job.id} for resume {resume_id}: {e}")
-                await session.rollback()
+            new_matches.append(Match(
+                resume_id=resume_id,
+                job_id=job.id,
+                overall_score=overall_score,
+                semantic_score=round(semantic_score * 100, 1),
+                keyword_score=round(keyword_score * 100, 1),
+                classifier_score=round(confidence * 100, 1),
+                fit_label=fit_label,
+                confidence=round(confidence, 3),
+                matched_skills=matched_skills,
+                missing_skills=missing_skills,
+                experience_gap=experience_gap,
+                summary=summary,
+            ))
 
             _update_progress(task, i + 1, total)
 
-    # Refresh dbt models after scoring
+        # Progress for already-scored jobs (they were skipped in the loop above)
+        for i, job in enumerate(jobs):
+            if job.id in already_scored:
+                _update_progress(task, i + 1, total)
+
+        if new_matches:
+            session.add_all(new_matches)
+            await session.commit()
+
+        logger.info(
+            "Scored %d jobs for resume %d (%d already existed)",
+            len(new_matches), resume_id, len(already_scored),
+        )
+
+    # Refresh dbt gold layer
     try:
         subprocess.run(
             ["dbt", "run", "--project-dir", "/app/dbt", "--profiles-dir", "/app/dbt"],
@@ -82,7 +171,7 @@ async def _run_matching(task, resume_id: int) -> dict:
             timeout=120,
         )
     except Exception as e:
-        logger.warning(f"dbt refresh after matching: {e}")
+        logger.warning("dbt refresh after matching: %s", e)
 
     return {"completed": True, "total": total, "percent": 100}
 

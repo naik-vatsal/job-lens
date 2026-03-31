@@ -66,6 +66,34 @@ def get_classifier():
     return _classifier
 
 
+def classify_batch(
+    texts: list[str],
+    batch_size: int = 8,
+) -> list[tuple[str, float]]:
+    """Run BART zero-shot classification on all texts in one batched call.
+
+    Returns a list of (fit_label, confidence) tuples in the same order as *texts*.
+    Falls back to empty strings / 0.0 on error so callers can degrade gracefully.
+    """
+    if not texts:
+        return []
+    try:
+        clf = get_classifier()
+        results = clf(
+            texts,
+            candidate_labels=["strong fit", "partial fit", "weak fit"],
+            batch_size=batch_size,
+        )
+        # When a single string is passed, the pipeline returns a dict; a list
+        # of strings returns a list of dicts.  Normalise to always be a list.
+        if isinstance(results, dict):
+            results = [results]
+        return [(r["labels"][0], float(r["scores"][0])) for r in results]
+    except Exception as exc:
+        logger.error("classify_batch error: %s", exc)
+        return [("", 0.0)] * len(texts)
+
+
 def extract_skills(text: str) -> list[str]:
     text_lower = text.lower()
     found = set()
