@@ -10,10 +10,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 logger = logging.getLogger(__name__)
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+asyncpg://postgres:postgres@postgres:5432/joblens",
-)
+DATABASE_URL = os.environ["DATABASE_URL"]
 _engine = create_async_engine(DATABASE_URL, pool_pre_ping=True)
 _session_maker = async_sessionmaker(_engine, expire_on_commit=False)
 

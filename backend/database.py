@@ -1,11 +1,13 @@
+import logging
 import os
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+asyncpg://postgres:postgres@postgres:5432/joblens",
-)
+logger = logging.getLogger(__name__)
+
+DATABASE_URL = os.environ["DATABASE_URL"]
+
+logger.info("DATABASE_URL prefix: %s", DATABASE_URL[:30])
 
 engine = create_async_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

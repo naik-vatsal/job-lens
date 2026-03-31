@@ -31,7 +31,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+REDIS_URL = os.environ["REDIS_URL"]
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["20/minute"])
 
