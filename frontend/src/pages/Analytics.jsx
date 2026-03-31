@@ -33,11 +33,10 @@ function Card({ children, style }) {
 }
 
 const COACH_SUGGESTIONS = [
-  'Which job should I apply to first?',
-  'What skills should I learn next?',
-  'How is my resume performing?',
-  'What are the most in-demand skills?',
-  'Am I a strong fit for ML Engineer roles?',
+  'What job should I apply to first?',
+  'What skills am I missing most?',
+  'How do I improve my match score?',
+  'Which companies am I best suited for?',
 ]
 
 function CoachPanel({ resumeId, onClose }) {

@@ -2,11 +2,10 @@ import { useState, useRef, useEffect } from 'react'
 import { loadResumeId, chatWithAgent } from '../api.js'
 
 const SUGGESTIONS = [
-  'Which job should I apply to first?',
-  'What skills should I learn next?',
-  'How do I improve my score for my top role?',
-  'What are the most in-demand skills right now?',
-  'Am I a strong candidate for ML Engineer roles?',
+  'What job should I apply to first?',
+  'What skills am I missing most?',
+  'How do I improve my match score?',
+  'Which companies am I best suited for?',
 ]
 
 function Message({ role, text }) {
