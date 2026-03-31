@@ -43,7 +43,9 @@ async def _run_matching(task, resume_id: int) -> dict:
         semantic_scores = (job_embs @ resume_emb).clip(0.0, 1.0)              # (n,)
 
         # ── 2. Keyword scores (pure Python set ops, no model) ─────────────────
-        resume_skills_set = set(str(s) for s in (resume.parsed_skills or []))
+        resume_skills_set = set(
+            str(s) for s in (list(resume.parsed_skills) if resume.parsed_skills else [])
+        )
         resume_text = str(resume.raw_text)
 
         # One query to find already-scored jobs
