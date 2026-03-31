@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install mypy sqlalchemy[mypy] pydantic fastapi
+      - run: pip install mypy sqlalchemy[mypy] pydantic fastapi alembic
       - run: mypy backend/ --ignore-missing-imports --no-strict-optional
 
   test:
