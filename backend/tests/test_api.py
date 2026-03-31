@@ -37,10 +37,10 @@ _fake_analytics.get_resume_analytics = AsyncMock(return_value={})
 sys.modules.setdefault("analytics", _fake_analytics)
 
 # ── Stdlib / third-party imports (after patching) ────────────────────────────
-import pytest
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import AsyncSession
-from unittest.mock import patch
+import pytest  # noqa: E402
+from httpx import AsyncClient, ASGITransport  # noqa: E402
+from sqlalchemy.ext.asyncio import AsyncSession  # noqa: E402
+from unittest.mock import patch  # noqa: E402
 
 from main import app, get_db  # noqa: E402 — must come after sys.modules setup
 

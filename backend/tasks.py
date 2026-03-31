@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import subprocess
+from typing import cast
 
 from celery_app import celery_app
 from sqlalchemy import select
@@ -50,7 +51,7 @@ async def _run_matching(task, resume_id: int) -> dict:
                 score_result = await score_match(
                     str(resume.raw_text),
                     str(job.job_description),
-                    resume.parsed_skills,
+                    cast(list[str], resume.parsed_skills),
                 )
 
                 match = Match(

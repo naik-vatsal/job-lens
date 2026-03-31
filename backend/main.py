@@ -244,7 +244,7 @@ async def list_jobs(
             for job, match in rows
         ]
     else:
-        query = select(Job)
+        query = select(Job)  # type: ignore[assignment]
         if role:
             query = query.where(Job.title.ilike(f"%{role}%"))
         if location:
