@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import subprocess
+from urllib.parse import urlparse
 
 import numpy as np
 
@@ -167,10 +168,22 @@ async def _run_matching(task, resume_id: int) -> dict:
 
     # Refresh dbt gold layer
     try:
+        raw = os.environ["DATABASE_URL"]
+        clean = raw.split("+")[0] + "://" + raw.split("://", 1)[1] if "+asyncpg" in raw else raw
+        p = urlparse(clean)
+        dbt_env = {
+            **os.environ,
+            "DB_HOST": p.hostname or "localhost",
+            "DB_PORT": str(p.port or 5432),
+            "DB_USER": p.username or "postgres",
+            "DB_PASS": p.password or "",
+            "DB_NAME": (p.path or "/joblens").lstrip("/"),
+        }
         subprocess.run(
             ["dbt", "run", "--project-dir", "/app/dbt", "--profiles-dir", "/app/dbt"],
             capture_output=True,
             timeout=120,
+            env=dbt_env,
         )
     except Exception as e:
         logger.warning("dbt refresh after matching: %s", e)

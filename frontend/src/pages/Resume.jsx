@@ -5,6 +5,63 @@ import SkillChip from '../components/SkillChip.jsx'
 
 const POLL_INTERVAL = 2000
 
+const STEPS = ['Upload', 'Analyze', 'Match', 'Results']
+
+function StepBar({ active }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+      {STEPS.map((label, i) => {
+        const done    = i < active
+        const current = i === active
+        return (
+          <div key={label} style={{ display: 'flex', alignItems: 'center', flex: i < STEPS.length - 1 ? 1 : 'none' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+              <div style={{
+                width: '28px', height: '28px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '0.72rem', fontWeight: 700,
+                background: done ? '#6366f1' : current ? '#312e81' : '#1e293b',
+                border: `2px solid ${done || current ? '#6366f1' : '#334155'}`,
+                color: done || current ? '#fff' : '#94a3b8',
+                transition: 'all 0.3s ease',
+              }}>
+                {done ? '✓' : i + 1}
+              </div>
+              <span style={{
+                fontSize: '0.72rem', fontWeight: 500,
+                color: done || current ? '#f1f5f9' : '#94a3b8',
+                whiteSpace: 'nowrap',
+              }}>
+                {label}
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <div style={{
+                flex: 1, height: '2px', margin: '0 8px', marginBottom: '20px',
+                background: done ? '#6366f1' : '#334155',
+                transition: 'background 0.3s ease',
+              }} />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function SkeletonChips() {
+  return (
+    <div style={{ marginTop: '2rem' }}>
+      <div className="skeleton" style={{ width: '140px', height: '18px', marginBottom: '12px' }} />
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+        {[80, 60, 100, 70, 90, 55, 75].map((w, i) => (
+          <div key={i} className="skeleton" style={{ width: `${w}px`, height: '26px', borderRadius: '20px' }} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Resume() {
   const navigate   = useNavigate()
   const [text,     setText]     = useState('')
@@ -12,6 +69,7 @@ export default function Resume() {
   const [resumeId, setResumeId] = useState(loadResumeId())
   const [showForm, setShowForm] = useState(!loadResumeId())
   const [loading,  setLoading]  = useState(false)
+  const [retrying, setRetrying] = useState(false)
   const [matching, setMatching] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error,    setError]    = useState('')
@@ -19,9 +77,12 @@ export default function Resume() {
 
   useEffect(() => () => clearInterval(pollRef.current), [])
 
+  const activeStep = matching ? 2 : (resumeId && !showForm) ? 2 : loading ? 1 : 0
+
   async function handleAnalyze() {
     if (!text.trim()) { setError('Paste your resume text first.'); return }
     setError('')
+    setRetrying(false)
     setLoading(true)
     try {
       const { data } = await uploadResume(text)
@@ -29,10 +90,27 @@ export default function Resume() {
       setResumeId(data.resume_id)
       setSkills(data.parsed_skills)
       setShowForm(false)
-    } catch {
-      setError('Failed to analyze resume. Make sure the API is running.')
+    } catch (err) {
+      const isTimeout = err?.code === 'ECONNABORTED' || err?.message?.includes('timeout')
+      if (isTimeout) {
+        setRetrying(true)
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        try {
+          const { data } = await uploadResume(text)
+          saveResumeId(data.resume_id)
+          setResumeId(data.resume_id)
+          setSkills(data.parsed_skills)
+          setShowForm(false)
+          return
+        } catch {
+          setError('Request timed out. The API may still be loading — please try again in a moment.')
+        }
+      } else {
+        setError('Failed to analyze resume. Make sure the API is running.')
+      }
     } finally {
       setLoading(false)
+      setRetrying(false)
     }
   }
 
@@ -76,27 +154,33 @@ export default function Resume() {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '8px' }}>
+    <div className="page-enter" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+      <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '4px' }}>
         Analyze Your Resume
       </h1>
       <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
         Paste your resume below to extract skills and find matching jobs using semantic AI.
       </p>
 
+      <StepBar active={activeStep} />
+
       {/* ── Already-analyzed banner ── */}
       {resumeId && !showForm && (
         <div style={{
-          background: '#14532d33',
-          border: '1px solid #22c55e44',
-          borderRadius: '10px',
+          background: 'linear-gradient(135deg, #14532d18, #0f172a)',
+          border: '1px solid #22c55e33',
+          borderRadius: '12px',
           padding: '20px 24px',
           marginBottom: '1.5rem',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <span style={{ fontSize: '1.2rem' }}>✓</span>
-            <span style={{ fontWeight: 600, color: '#22c55e' }}>Resume already analyzed</span>
-            <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>(Resume #{resumeId})</span>
+            <div style={{
+              width: '24px', height: '24px', borderRadius: '50%',
+              background: '#22c55e', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', fontSize: '12px', color: '#0f172a', fontWeight: 700,
+            }}>✓</div>
+            <span style={{ fontWeight: 600, color: '#22c55e' }}>Resume analyzed</span>
+            <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>Resume #{resumeId}</span>
           </div>
 
           {skills.length > 0 && (
@@ -126,7 +210,7 @@ export default function Resume() {
               onClick={handleReanalyze}
               disabled={matching}
               style={{
-                background: '#273549',
+                background: 'transparent',
                 color: '#94a3b8',
                 border: '1px solid #334155',
                 borderRadius: '8px',
@@ -140,21 +224,20 @@ export default function Resume() {
             </button>
           </div>
 
-          {/* Progress bar (matching from already-analyzed state) */}
           {matching && (
             <div style={{ marginTop: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem', color: '#94a3b8' }}>
-                <span>Scoring jobs with AI…</span>
-                <span>{progress}%</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.82rem', color: '#94a3b8' }}>
+                <span>Scoring {progress < 100 ? 'jobs with AI…' : 'complete!'}</span>
+                <span style={{ fontWeight: 600, color: '#6366f1' }}>{progress}%</span>
               </div>
-              <div style={{ background: '#273549', borderRadius: '8px', height: '8px', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%',
-                  width: `${progress}%`,
-                  background: 'linear-gradient(90deg, #6366f1, #22c55e)',
-                  borderRadius: '8px',
-                  transition: 'width 0.3s ease',
-                }} />
+              <div className="score-bar-track">
+                <div
+                  className="score-bar-fill"
+                  style={{
+                    width: `${progress}%`,
+                    background: 'linear-gradient(90deg, #6366f1, #22c55e)',
+                  }}
+                />
               </div>
             </div>
           )}
@@ -163,31 +246,40 @@ export default function Resume() {
 
       {/* ── Submission form ── */}
       {showForm && (
-        <>
+        <div style={{
+          background: '#1e293b',
+          border: '1px solid #334155',
+          borderRadius: '12px',
+          padding: '20px',
+          boxShadow: '0 4px 24px #00000033',
+        }}>
+          <div style={{ fontSize: '0.82rem', color: '#94a3b8', marginBottom: '10px', fontWeight: 500 }}>
+            Resume text
+          </div>
           <textarea
             value={text}
             onChange={e => setText(e.target.value)}
             placeholder="Paste your resume text here…"
-            rows={14}
+            rows={13}
             style={{
               width: '100%',
-              background: '#1e293b',
-              border: '1px solid #334155',
-              borderRadius: '10px',
+              background: '#0f172a',
+              border: '1px solid #273549',
+              borderRadius: '8px',
               color: '#f1f5f9',
-              padding: '16px',
-              fontSize: '0.9rem',
+              padding: '14px',
+              fontSize: '0.88rem',
               resize: 'vertical',
               outline: 'none',
               transition: 'border-color 0.15s',
               lineHeight: 1.7,
             }}
-            onFocus={e => (e.target.style.borderColor = '#6366f1')}
-            onBlur={e  => (e.target.style.borderColor = '#334155')}
+            onFocus={e  => (e.target.style.borderColor = '#6366f1')}
+            onBlur={e   => (e.target.style.borderColor = '#273549')}
             disabled={loading}
           />
 
-          <div style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+          <div style={{ marginTop: '14px', display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
               onClick={handleAnalyze}
               disabled={loading}
@@ -203,10 +295,17 @@ export default function Resume() {
                 transition: 'opacity 0.15s',
               }}
             >
-              {loading ? 'Analyzing…' : 'Analyze Resume'}
+              {retrying ? 'Retrying…' : loading ? 'Analyzing…' : 'Analyze Resume'}
             </button>
+            {loading && (
+              <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
+                {retrying
+                  ? 'Retrying automatically…'
+                  : 'This may take up to 60 s on first run while the AI model warms up…'}
+              </span>
+            )}
           </div>
-        </>
+        </div>
       )}
 
       {error && (
@@ -223,12 +322,15 @@ export default function Resume() {
         </div>
       )}
 
-      {/* Parsed skills (shown after fresh analysis) */}
-      {showForm && skills.length > 0 && (
+      {/* Skeleton while analyzing */}
+      {loading && <SkeletonChips />}
+
+      {/* Parsed skills after fresh analysis (form still visible) */}
+      {showForm && !loading && skills.length > 0 && (
         <div style={{ marginTop: '2rem' }}>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '12px', color: '#f1f5f9' }}>
             Detected Skills
-            <span style={{ marginLeft: '8px', color: '#94a3b8', fontWeight: 400, fontSize: '0.85rem' }}>
+            <span style={{ marginLeft: '8px', color: '#94a3b8', fontWeight: 400, fontSize: '0.82rem' }}>
               ({skills.length} found)
             </span>
           </h2>

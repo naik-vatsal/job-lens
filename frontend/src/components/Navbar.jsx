@@ -42,6 +42,7 @@ export default function Navbar() {
         { to: '/resume',    label: 'Resume'    },
         { to: '/jobs',      label: 'Jobs'      },
         { to: '/analytics', label: 'Analytics' },
+        { to: '/coach',     label: 'Coach'     },
       ].map(({ to, label }) => (
         <NavLink
           key={to}

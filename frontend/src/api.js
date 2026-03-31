@@ -12,8 +12,8 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Resume
-export const uploadResume   = (text)      => api.post('/resume', { text })
+// Resume — 60s timeout: sentence-transformer is cold on first request
+export const uploadResume   = (text)      => api.post('/resume', { text }, { timeout: 60000 })
 export const matchAllJobs   = (resumeId)  => api.post(`/resume/${resumeId}/match-all`)
 
 // Tasks
@@ -33,6 +33,10 @@ export const getResumeAnalytics  = (resumeId) => api.get(`/analytics/resume/${re
 
 // Seed
 export const seedJobs = () => api.post('/jobs/seed')
+
+// Career Coach
+export const chatWithAgent = (message, resumeId, history = []) =>
+  api.post('/agent/chat', { message, resume_id: resumeId, history }, { timeout: 60000 })
 
 // Resume ID persistence
 const RESUME_ID_KEY = 'joblens_resume_id'

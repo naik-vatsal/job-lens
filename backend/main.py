@@ -5,6 +5,7 @@ import subprocess
 import uuid
 from contextlib import asynccontextmanager
 from typing import Optional
+from urllib.parse import urlparse
 
 import redis.asyncio as aioredis
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
@@ -22,6 +23,7 @@ from celery_app import celery_app
 from crawler import generate_mock_jobs
 from database import async_session_maker, get_db
 from models import Job, Match, Resume
+from routers.agent import router as agent_router
 from scorer import extract_skills, get_embedding
 from tasks import match_resume_all_jobs
 
@@ -80,6 +82,22 @@ def _run_alembic() -> None:
         logger.error(f"Alembic error: {exc}")
 
 
+def _dbt_env() -> dict[str, str]:
+    """Parse DATABASE_URL into the individual env vars dbt's profiles.yml expects."""
+    raw = os.environ["DATABASE_URL"]
+    # Strip SQLAlchemy driver variant (postgresql+asyncpg:// → postgresql://)
+    clean = raw.split("+")[0] + "://" + raw.split("://", 1)[1] if "+asyncpg" in raw else raw
+    p = urlparse(clean)
+    return {
+        **os.environ,
+        "DB_HOST": p.hostname or "localhost",
+        "DB_PORT": str(p.port or 5432),
+        "DB_USER": p.username or "postgres",
+        "DB_PASS": p.password or "",
+        "DB_NAME": (p.path or "/joblens").lstrip("/"),
+    }
+
+
 def _run_dbt() -> None:
     try:
         res = subprocess.run(
@@ -87,6 +105,7 @@ def _run_dbt() -> None:
             capture_output=True,
             text=True,
             timeout=120,
+            env=_dbt_env(),
         )
         tail = (res.stdout or "")[-400:]
         logger.info(f"dbt finished (rc={res.returncode}): {tail}")
@@ -219,6 +238,7 @@ async def list_jobs(
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     min_score: Optional[float] = Query(None),
+    fit_label: Optional[str] = Query(None),
     role: Optional[str] = Query(None),
     location: Optional[str] = Query(None),
     sort_by: str = Query("date"),
@@ -234,12 +254,16 @@ async def list_jobs(
         )
         if min_score is not None:
             query = query.where(Match.overall_score >= min_score)
+        if fit_label:
+            query = query.where(Match.fit_label == fit_label)
         if role:
             query = query.where(Job.title.ilike(f"%{role}%"))
         if location:
             query = query.where(Job.location.ilike(f"%{location}%"))
         query = query.order_by(
-            Match.overall_score.desc() if sort_by == "score" else Job.posted_at.desc()
+            Match.overall_score.desc() if sort_by == "score"
+            else Job.salary_range.desc() if sort_by == "salary"
+            else Job.posted_at.desc()
         )
         total = await db.scalar(select(func.count()).select_from(query.subquery()))  # type: ignore[arg-type]
         rows = (await db.execute(query.offset(offset).limit(limit))).all()
@@ -255,6 +279,7 @@ async def list_jobs(
                 "overall_score": match.overall_score,
                 "fit_label": match.fit_label,
                 "matched_skills": (match.matched_skills or [])[:3],
+                "missing_skills": (match.missing_skills or [])[:3],
             }
             for job, match in rows
         ]
@@ -402,6 +427,56 @@ async def seed_jobs_endpoint(db: AsyncSession = Depends(get_db)):
     await _seed_jobs(db)
     total = await db.scalar(select(func.count(Job.id)))
     return {"seeded": 50, "total_jobs": total}
+
+
+# ── Career Coach data endpoints ───────────────────────────────────────────────
+
+@app.get("/resume/{resume_id}/gaps")
+async def resume_gaps(resume_id: int, db: AsyncSession = Depends(get_db)):
+    resume = await db.get(Resume, resume_id)
+    if not resume:
+        raise HTTPException(status_code=404, detail="Resume not found")
+    data = await get_resume_analytics(resume_id, db)
+    return {"skill_gaps": data["skill_gaps"]}
+
+
+@app.get("/resume/{resume_id}/top-jobs")
+async def top_jobs(resume_id: int, db: AsyncSession = Depends(get_db)):
+    resume = await db.get(Resume, resume_id)
+    if not resume:
+        raise HTTPException(status_code=404, detail="Resume not found")
+    rows = (
+        await db.execute(
+            select(Match, Job)
+            .join(Job, Match.job_id == Job.id)
+            .where(Match.resume_id == resume_id)
+            .order_by(Match.overall_score.desc())
+            .limit(5)
+        )
+    ).all()
+    return {
+        "top_jobs": [
+            {
+                "id": job.id,
+                "title": job.title,
+                "company": job.company,
+                "overall_score": match.overall_score,
+                "fit_label": match.fit_label,
+                "matched_skills": list(match.matched_skills or []),
+                "missing_skills": list((match.missing_skills or [])[:6]),
+            }
+            for match, job in rows
+        ]
+    }
+
+
+@app.get("/market/demand")
+async def market_demand(db: AsyncSession = Depends(get_db)):
+    data = await get_market_analytics(db)
+    return {"top_skills": data["top_skills"]}
+
+
+app.include_router(agent_router, prefix="/agent", tags=["agent"])
 
 
 @app.get("/health")
