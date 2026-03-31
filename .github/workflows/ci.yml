@@ -65,7 +65,7 @@ jobs:
           python-version: "3.11"
       - run: pip install pytest pytest-asyncio httpx fastapi sqlalchemy[asyncio] asyncpg pydantic alembic redis numpy
         working-directory: backend
-      - run: pytest tests/ -v --tb=short
+      - run: pytest -v --tb=short
         working-directory: backend
 
   frontend-build:

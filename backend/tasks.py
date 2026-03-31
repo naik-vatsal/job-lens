@@ -5,7 +5,7 @@ import subprocess
 
 from celery_app import celery_app
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 logger = logging.getLogger(__name__)
 
@@ -48,8 +48,8 @@ async def _run_matching(task, resume_id: int) -> dict:
                     continue
 
                 score_result = await score_match(
-                    resume.raw_text,
-                    job.job_description,
+                    str(resume.raw_text),
+                    str(job.job_description),
                     resume.parsed_skills,
                 )
 

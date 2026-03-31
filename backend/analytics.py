@@ -1,7 +1,6 @@
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import text, select, func
-from models import Match, Job, Resume
+from sqlalchemy import text
 
 logger = logging.getLogger(__name__)
 

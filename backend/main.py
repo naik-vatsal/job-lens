@@ -21,7 +21,7 @@ from celery_app import celery_app
 from crawler import generate_mock_jobs
 from database import async_session_maker, get_db
 from models import Job, Match, Resume
-from scorer import extract_skills, get_embedding, _sentence_model, _nlp
+from scorer import extract_skills, get_embedding
 from tasks import match_resume_all_jobs
 
 # ── Logging ──────────────────────────────────────────────────────────────────
@@ -226,7 +226,7 @@ async def list_jobs(
         query = query.order_by(
             Match.overall_score.desc() if sort_by == "score" else Job.posted_at.desc()
         )
-        total = await db.scalar(select(func.count()).select_from(query.subquery()))
+        total = await db.scalar(select(func.count()).select_from(query.subquery()))  # type: ignore[arg-type]
         rows = (await db.execute(query.offset(offset).limit(limit))).all()
         jobs_out = [
             {

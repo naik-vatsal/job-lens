@@ -14,7 +14,7 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
+    op.create_table(  # type: ignore[attr-defined]
         "resumes",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("raw_text", sa.Text(), nullable=False),
@@ -23,9 +23,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_resumes_id", "resumes", ["id"])
+    op.create_index("ix_resumes_id", "resumes", ["id"])  # type: ignore[attr-defined]
 
-    op.create_table(
+    op.create_table(  # type: ignore[attr-defined]
         "jobs",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("title", sa.String(length=200), nullable=False),
@@ -40,9 +40,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_jobs_id", "jobs", ["id"])
+    op.create_index("ix_jobs_id", "jobs", ["id"])  # type: ignore[attr-defined]
 
-    op.create_table(
+    op.create_table(  # type: ignore[attr-defined]
         "matches",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("resume_id", sa.Integer(), nullable=False),
@@ -62,12 +62,12 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["resume_id"], ["resumes.id"]),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_matches_id", "matches", ["id"])
-    op.create_index("ix_matches_resume_id", "matches", ["resume_id"])
-    op.create_index("ix_matches_job_id", "matches", ["job_id"])
+    op.create_index("ix_matches_id", "matches", ["id"])  # type: ignore[attr-defined]
+    op.create_index("ix_matches_resume_id", "matches", ["resume_id"])  # type: ignore[attr-defined]
+    op.create_index("ix_matches_job_id", "matches", ["job_id"])  # type: ignore[attr-defined]
 
 
 def downgrade() -> None:
-    op.drop_table("matches")
-    op.drop_table("jobs")
-    op.drop_table("resumes")
+    op.drop_table("matches")  # type: ignore[attr-defined]
+    op.drop_table("jobs")  # type: ignore[attr-defined]
+    op.drop_table("resumes")  # type: ignore[attr-defined]
