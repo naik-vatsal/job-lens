@@ -1,159 +1,343 @@
 # JobLens
 
-> AI-powered job intelligence platform — match your resume against 50+ job postings using semantic embeddings, keyword scoring, and zero-shot classification.
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)](https://redis.io)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose)
+[![CI](https://img.shields.io/github/actions/workflow/status/your-org/job-lens/ci.yml?branch=main&label=CI&logo=github-actions&logoColor=white)](https://github.com/your-org/job-lens/actions)
 
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)
-![Celery](https://img.shields.io/badge/Celery-5.4-37814A?logo=celery&logoColor=white)
-![dbt](https://img.shields.io/badge/dbt-1.8-FF694B?logo=dbt&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
+---
+
+JobLens is a full-stack job intelligence platform that scores your resume against a curated set of job postings using a three-component AI pipeline: semantic similarity via sentence-transformers, keyword overlap via spaCy NER, and zero-shot fit classification via a BART model. Results are cached in Redis, persisted to PostgreSQL, and surfaced through a React dashboard that shows per-job match breakdowns, missing skill gaps, and market-wide analytics built on a dbt bronze/silver/gold data layer.
 
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Browser  :5173                                          │
-│  React + Vite  ──── axios ──→  /api  ──proxy──→ FastAPI │
-└────────────────────────────────────┬────────────────────┘
-                                     │
-             ┌───────────────────────▼──────────────────────┐
-             │  FastAPI  :8000                               │
-             │  • POST /resume          (skill extraction)   │
-             │  • POST /resume/match-all (Celery task)       │
-             │  • GET  /jobs            (paginated + scored) │
-             │  • GET  /analytics/market                     │
-             │  • GET  /analytics/resume/{id}               │
-             │  • GET  /metrics         (Prometheus)         │
-             └──────┬──────────────────────┬────────────────┘
-                    │                      │
-         ┌──────────▼──────┐    ┌──────────▼──────────┐
-         │  PostgreSQL :5432│    │  Redis :6379         │
-         │  ├ resumes       │    │  ├ Celery broker     │
-         │  ├ jobs          │    │  └ match cache SHA256│
-         │  └ matches       │    └─────────────────────┘
-         │                  │
-         │  dbt gold layer  │         ┌──────────────────┐
-         │  ├ gold_market_  │         │  Celery Worker   │
-         │  │  skills       │◄────────│  • score_match   │
-         │  ├ gold_resume_  │         │  • sentence-     │
-         │  │  gaps         │         │    transformers  │
-         │  ├ gold_score_   │         │  • BART zero-shot│
-         │  │  distribution │         │  • spaCy NER     │
-         │  ├ gold_top_roles│         └──────────────────┘
-         │  └ gold_company_ │
-         │    insights      │    ┌──────────────────────┐
-         └──────────────────┘    │  Prometheus :9090    │
-                                 │  Grafana    :3000    │
-                                 │  Flower     :5555    │
-                                 └──────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│  Browser                                                             │
+│  React 18 + Vite  :5173  ──── axios ──→  /api/*  ──proxy──┐        │
+└───────────────────────────────────────────────────────────┼────────┘
+                                                            │
+                          ┌─────────────────────────────────▼────────┐
+                          │  FastAPI  :8000                           │
+                          │                                           │
+                          │  POST /resume            skill extract    │
+                          │  POST /resume/{id}/match-all  → Celery   │
+                          │  GET  /tasks/{task_id}   poll progress    │
+                          │  GET  /jobs              paginated+scored │
+                          │  GET  /jobs/{id}         full breakdown   │
+                          │  GET  /matches           match history    │
+                          │  GET  /analytics/market  gold layer       │
+                          │  GET  /analytics/resume/{id}  personal   │
+                          │  POST /jobs/seed         generate mocks   │
+                          │  GET  /health                             │
+                          │  GET  /metrics           Prometheus       │
+                          └──────────┬──────────────────┬────────────┘
+                                     │                  │
+               ┌─────────────────────▼──┐   ┌──────────▼───────────┐
+               │  PostgreSQL  :5432      │   │  Redis  :6379         │
+               │                        │   │                       │
+               │  resumes               │   │  Celery broker        │
+               │  jobs                  │   │  match result cache   │
+               │  matches               │   │  SHA-256 key, 1h TTL  │
+               │                        │   └───────────────────────┘
+               │  dbt views (public.*)  │
+               │  ├─ bronze_jobs        │   ┌───────────────────────┐
+               │  ├─ bronze_resumes     │   │  Celery Worker        │
+               │  ├─ bronze_matches     │   │                       │
+               │  ├─ silver_jobs        │   │  score_match()        │
+               │  ├─ silver_matches     │   │  ├─ sentence-         │
+               │  ├─ gold_market_skills │◄──┤  │   transformers     │
+               │  ├─ gold_resume_gaps   │   │  ├─ spaCy en_core_    │
+               │  ├─ gold_score_dist    │   │  │   web_sm           │
+               │  ├─ gold_top_roles     │   │  └─ BART zero-shot    │
+               │  └─ gold_company_      │   │     classifier        │
+               │     insights           │   └───────────────────────┘
+               └────────────────────────┘
+                                            ┌───────────────────────┐
+                                            │  Prometheus  :9090    │
+                                            │  scrapes /metrics     │
+                                            │  every 15 s           │
+                                            │                       │
+                                            │  Grafana  :3000       │
+                                            │  request rate         │
+                                            │  p95 latency          │
+                                            │  error rate           │
+                                            │                       │
+                                            │  Flower  :5555        │
+                                            │  Celery task monitor  │
+                                            └───────────────────────┘
 ```
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|---|---|---|
+| API | FastAPI | 0.110.3 |
+| API server | Uvicorn | 0.30.1 |
+| ORM | SQLAlchemy (async) | 2.0.30 |
+| Migrations | Alembic | 1.13.1 |
+| Validation | Pydantic | 2.7.1 |
+| Task queue | Celery + Redis broker | 5.4.0 |
+| Semantic embeddings | sentence-transformers `all-mpnet-base-v2` | 2.7.0 |
+| NER / skill extraction | spaCy `en_core_web_sm` | 3.7.4 |
+| Zero-shot classifier | Hugging Face `facebook/bart-large-mnli` | transformers 4.41.0 |
+| Analytics transforms | dbt-postgres | 1.8.2 |
+| Database | PostgreSQL | 15 |
+| Cache / broker | Redis | 7 |
+| Rate limiting | slowapi | 0.1.9 |
+| Metrics | prometheus-fastapi-instrumentator | 6.1.0 |
+| Frontend framework | React | 18.3.1 |
+| Build tool | Vite | 5.3.1 |
+| Routing | react-router-dom | 6.23.1 |
+| Charts | recharts | 2.12.7 |
+| HTTP client | axios | 1.7.2 |
+| Containerisation | Docker Compose | v2 |
+| Observability | Prometheus + Grafana | latest |
+| CI | GitHub Actions | — |
 
 ---
 
 ## Quick Start
 
 ### Prerequisites
-- Docker & Docker Compose
-- 8 GB RAM recommended (ML models are large)
 
-### Start the platform
+- Docker and Docker Compose v2
+- 8 GB RAM minimum (ML models load into the Celery worker at runtime)
+- No other local dependencies required
+
+### Start everything
 
 ```bash
-git clone <repo>
+git clone https://github.com/your-org/job-lens.git
 cd job-lens
 docker compose up --build
 ```
 
-Services come up in order. On first boot:
-1. Alembic migrations run automatically
-2. 50 mock jobs are seeded across 5 role types
-3. dbt models create the gold layer analytics views
-4. All services become healthy
+The first build takes 10–15 minutes while Docker pulls base images and downloads the sentence-transformer and BART models into the image layers. Subsequent starts are fast.
 
-| Service    | URL                        |
-|------------|----------------------------|
-| Frontend   | http://localhost:5173      |
-| API docs   | http://localhost:8000/docs |
-| Prometheus | http://localhost:9090      |
-| Grafana    | http://localhost:3000      |
-| Flower     | http://localhost:5555      |
+On first boot the API container automatically:
+1. Runs Alembic migrations (`alembic upgrade head`)
+2. Seeds 50 realistic mock jobs across five role types
+3. Runs dbt to materialise all bronze / silver / gold views
 
-### Seed jobs manually
+### Service URLs
+
+| Service | URL | Notes |
+|---|---|---|
+| Frontend | http://localhost:5173 | React + Vite dev server |
+| API (interactive docs) | http://localhost:8000/docs | Swagger UI |
+| API (ReDoc) | http://localhost:8000/redoc | Alternative docs |
+| Prometheus | http://localhost:9090 | Metrics scraper |
+| Grafana | http://localhost:3000 | Dashboards (admin / admin) |
+| Flower | http://localhost:5555 | Celery task monitor |
+
+---
+
+## Usage
+
+### Seed the job database
 
 ```bash
-curl -X POST http://localhost:8000/jobs/seed
+curl -s -X POST http://localhost:8000/jobs/seed | jq
 ```
 
-### Analyze a resume via API
+```json
+{
+  "seeded": 50,
+  "total_jobs": 50
+}
+```
+
+### Analyse a resume
 
 ```bash
-# 1. Upload resume
-curl -X POST http://localhost:8000/resume \
+# 1. Submit resume text — returns resume_id and detected skills
+curl -s -X POST http://localhost:8000/resume \
   -H "Content-Type: application/json" \
-  -d '{"text": "5 years Python experience. Built FastAPI services with PostgreSQL and Redis. Deployed on Kubernetes with Terraform."}'
+  -d '{
+    "text": "Senior software engineer with 5 years of Python experience. Built high-throughput APIs with FastAPI and PostgreSQL. Deployed containerised services on Kubernetes using Terraform and AWS. Familiar with Redis caching, Kafka event streaming, and Docker."
+  }' | jq
+```
 
-# 2. Match against all jobs (returns task_id)
-curl -X POST http://localhost:8000/resume/1/match-all
+```json
+{
+  "resume_id": 1,
+  "parsed_skills": ["AWS", "Docker", "FastAPI", "Kafka", "Kubernetes", "PostgreSQL", "Python", "Redis", "Terraform"],
+  "skill_count": 9
+}
+```
 
-# 3. Poll task status
-curl http://localhost:8000/tasks/<task_id>
+```bash
+# 2. Kick off scoring against all jobs — returns a Celery task_id
+curl -s -X POST http://localhost:8000/resume/1/match-all | jq
+```
 
-# 4. View results
-curl "http://localhost:8000/jobs?resume_id=1&sort_by=score"
+```json
+{
+  "task_id": "a3f2c1d0-8b4e-4f9a-bc12-1234567890ab",
+  "job_count": 50
+}
+```
+
+```bash
+# 3. Poll task progress every 2 seconds until percent reaches 100
+curl -s http://localhost:8000/tasks/a3f2c1d0-8b4e-4f9a-bc12-1234567890ab | jq
+```
+
+```json
+{
+  "task_id": "a3f2c1d0-8b4e-4f9a-bc12-1234567890ab",
+  "status": "running",
+  "percent": 64,
+  "current": 32,
+  "total": 50
+}
+```
+
+```bash
+# 4. Browse scored jobs sorted by match quality
+curl -s "http://localhost:8000/jobs?resume_id=1&sort_by=score&limit=5" | jq '.jobs[] | {title, company, overall_score, fit_label}'
+```
+
+```bash
+# 5. View full breakdown for a single job
+curl -s "http://localhost:8000/jobs/7?resume_id=1" | jq
+```
+
+```bash
+# 6. Personal analytics — skill gaps and best-fit roles
+curl -s http://localhost:8000/analytics/resume/1 | jq
 ```
 
 ---
 
 ## Scoring Algorithm
 
+Each resume–job pair is scored with three independent signals and combined into a single 0–100 score:
+
 ```
-overall_score = (semantic × 0.45) + (keyword × 0.35) + (classifier × 0.20)  ×  100
+overall_score = (semantic × 0.45) + (keyword × 0.35) + (classifier × 0.20) × 100
 ```
 
-| Component   | Model                         | Description                              |
-|-------------|-------------------------------|------------------------------------------|
-| Semantic    | all-mpnet-base-v2             | Cosine similarity of resume ↔ JD embeddings |
-| Keyword     | spaCy + regex                 | Matched skills / total JD skills         |
-| Classifier  | facebook/bart-large-mnli      | Zero-shot: strong / partial / weak fit   |
+| Signal | Model | What it measures |
+|---|---|---|
+| Semantic (45%) | `all-mpnet-base-v2` | Cosine similarity of 768-dim embeddings of the full resume and JD |
+| Keyword (35%) | spaCy + regex against a 60-skill pool | `matched_skills / total_jd_skills` |
+| Classifier (20%) | `facebook/bart-large-mnli` | Zero-shot confidence for labels: *strong fit*, *partial fit*, *weak fit* |
 
-Results are cached in Redis (SHA-256 key, TTL 1 hour).
+Score interpretation:
+
+| Range | Label | UI colour |
+|---|---|---|
+| 71 – 100 | Strong fit | Green `#22c55e` |
+| 41 – 70 | Partial fit | Amber `#f59e0b` |
+| 0 – 40 | Weak fit | Red `#ef4444` |
+
+Match results are cached in Redis under a SHA-256 key of `job_description:resume_text` with a one-hour TTL, so re-scoring the same pair is instant.
 
 ---
 
 ## dbt Data Layers
 
-| Layer  | Models                    | Purpose                            |
-|--------|---------------------------|------------------------------------|
-| Bronze | bronze_jobs/resumes/matches | Raw mirrors of source tables      |
-| Silver | silver_jobs, silver_matches | Cleaned, normalized, validated    |
-| Gold   | gold_market_skills        | Top skill demand across all jobs   |
-|        | gold_resume_gaps          | Per-resume most missing skills     |
-|        | gold_score_distribution   | Score bucket histograms            |
-|        | gold_top_roles            | Avg score per role type per resume |
-|        | gold_company_insights     | Avg fit score per company          |
+All dbt models materialise as views in the `public` schema of the PostgreSQL database and are refreshed automatically after each `match-all` task completes.
+
+| Layer | Model | Description |
+|---|---|---|
+| Bronze | `bronze_jobs` | Raw mirror of the `jobs` table |
+| Bronze | `bronze_resumes` | Raw mirror of the `resumes` table |
+| Bronze | `bronze_matches` | Raw mirror of the `matches` table |
+| Silver | `silver_jobs` | Deduplicated; location and salary normalised |
+| Silver | `silver_matches` | Validated scores (0–100 range enforced) |
+| Gold | `gold_market_skills` | Skill demand frequency across all job postings |
+| Gold | `gold_resume_gaps` | Per-resume skills most frequently missing |
+| Gold | `gold_score_distribution` | Match count per score bucket (0-30, 31-50, 51-70, 71-85, 86-100) |
+| Gold | `gold_top_roles` | Average match score per role type per resume |
+| Gold | `gold_company_insights` | Average score and skill overlap per company |
+
+---
+
+## API Reference
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/resume` | Parse resume, extract skills, store embedding |
+| `POST` | `/resume/{id}/match-all` | Enqueue Celery task to score against all jobs |
+| `GET` | `/tasks/{task_id}` | Poll task status and percent complete |
+| `GET` | `/jobs` | Paginated job list; filterable by score, role, location |
+| `GET` | `/jobs/{id}` | Full job detail with optional match breakdown |
+| `GET` | `/matches` | Match history for a resume |
+| `GET` | `/analytics/market` | Market-wide skill demand, score distribution, top companies |
+| `GET` | `/analytics/resume/{id}` | Personal skill gaps, best-fit roles, score percentile |
+| `POST` | `/jobs/seed` | Generate and insert 50 mock jobs |
+| `GET` | `/health` | DB, Redis, Celery, and model status |
+| `GET` | `/metrics` | Prometheus metrics endpoint |
+
+Full interactive documentation: **http://localhost:8000/docs**
 
 ---
 
 ## Screenshots
 
-> _Add screenshots here after running the app_
+> _Run `docker compose up --build`, open the app, analyse a resume, and replace these placeholders with real screenshots._
 
-- `/resume` — Resume paste + skill extraction
-- `/jobs` — Filtered job board with match scores
-- `/jobs/:id` — Full match breakdown with progress bars
-- `/analytics` — Market + personal analytics dashboard
+**Resume page** (`/resume`) — paste your resume, view extracted skills as chips, trigger match-all with a live progress bar.
+
+**Job Board** (`/jobs`) — grid of job cards each showing a coloured score circle, fit label badge, and top three matched skills. Filter by minimum score, role type, location, and sort order.
+
+**Job Detail** (`/jobs/:id`) — full match breakdown with three score progress bars (semantic / keyword / classifier), side-by-side matched and missing skill columns, experience gap indicator, and an AI-generated summary sentence.
+
+**Analytics Dashboard** (`/analytics`) — horizontal bar charts for top 20 in-demand skills and best-fit role types, score distribution histogram, company fit rankings, and a personal skill-gap chip list with frequency counts.
 
 ---
 
-## Tech Stack
+## Project Structure
 
-**Backend:** Python 3.11, FastAPI, SQLAlchemy (async), Alembic, Celery, Redis, PostgreSQL
-**ML:** sentence-transformers (all-mpnet-base-v2), spaCy (en_core_web_sm), Hugging Face BART
-**Analytics:** dbt-postgres (bronze/silver/gold layers)
-**Frontend:** React 18, Vite, react-router-dom, recharts, axios
-**Infra:** Docker Compose, Prometheus, Grafana, GitHub Actions CI
+```
+job-lens/
+├── backend/
+│   ├── main.py              # FastAPI app, all endpoints, startup lifecycle
+│   ├── models.py            # SQLAlchemy ORM models
+│   ├── database.py          # Async engine and session factory
+│   ├── scorer.py            # Three-component scoring pipeline + Redis cache
+│   ├── crawler.py           # Mock job generator (50 jobs, 5 role types)
+│   ├── analytics.py         # Gold-layer queries with direct SQL fallbacks
+│   ├── tasks.py             # Celery match-all task
+│   ├── celery_app.py        # Celery application factory
+│   ├── alembic/             # Database migrations
+│   ├── dbt/                 # dbt project (bronze / silver / gold models)
+│   ├── tests/               # pytest test suite
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── pages/           # Resume, JobBoard, JobDetail, Analytics
+│   │   └── components/      # Navbar, JobCard, ScoreCard, SkillChip
+│   ├── package.json
+│   └── Dockerfile
+├── docker-compose.yml
+├── prometheus.yml
+├── grafana/
+│   ├── dashboard.json
+│   └── provisioning/
+└── .github/workflows/ci.yml
+```
+
+---
+
+## CI
+
+GitHub Actions runs four jobs on every push and pull request to `main`:
+
+| Job | Tool | What it checks |
+|---|---|---|
+| `lint` | ruff | Style and unused imports across `backend/` |
+| `typecheck` | mypy | Type correctness (`--ignore-missing-imports --no-strict-optional`) |
+| `test` | pytest + pytest-asyncio | API endpoint tests with mocked DB and scorer |
+| `frontend-build` | Vite | `npm run build` succeeds |
